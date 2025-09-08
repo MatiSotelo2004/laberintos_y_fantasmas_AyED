@@ -4,7 +4,7 @@
 #include "macros.h"
 #define CAP_INICIAL_VECTOR_MOVIMIENTOS 100
 
-typedef struct 
+typedef struct
 {
     unsigned vidas;
     char *vMovimientos;
@@ -14,8 +14,8 @@ typedef struct
     unsigned capMaxMovimientos;
 }tJugador;
 
-int jugadorCrear(tJugador *jugador, unsigned vidasInicial);
+int jugadorCrear(tJugador *jugador);
 void jugadorDestruir(tJugador *jugador);
-void jugadorInicializar(tJugador *jugador, const tCoordenadas *posicionInicial);
+void jugadorInicializar(tJugador *jugador, const tCoordenadas *posicionInicial, unsigned vidasInicial);
 
 #endif // JUGADOR_H_INCLUDED

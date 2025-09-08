@@ -1,6 +1,7 @@
 #include "objetos.h"
+#include "coordenadas.h"
 
-int objetosCrear(tPosObjeto *objetos, const tConfigTablero *config)
+int objetosCrear(tPosObjeto *objetos, const tConfigTablero *config, const tCoordenadas *jugadorInicio)
 {
     if(config->cantParedes > 0)
     {
@@ -22,6 +23,9 @@ int objetosCrear(tPosObjeto *objetos, const tConfigTablero *config)
         if(!objetos->vidas)
             return TABLERO_SIN_MEM;
     }
+
+    objetos->jugador.x = jugadorInicio->x;
+    objetos->jugador.y = jugadorInicio->y;
 
     return TODO_OK;
 }

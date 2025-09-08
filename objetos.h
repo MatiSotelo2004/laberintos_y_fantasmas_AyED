@@ -13,7 +13,7 @@ typedef struct
     tCoordenadas *vidas;
 }tPosObjeto;
 
-int objetosCrear(tPosObjeto *objetos, const tConfigTablero *config);
+int objetosCrear(tPosObjeto *objetos, const tConfigTablero *config, const tCoordenadas *jugadorInicio);
 void objetosDestruir(tPosObjeto *objetos);
 tCoordenadas posicionAleatoriaObtener(const tCoordenadas *limite);
 tCoordenadas* objetoParedesObtenerPunteroCoordenadas(const tPosObjeto *objeto);
