@@ -62,3 +62,57 @@
 	"coordenadas.h"
 	"macros.h"
 
+1757193393 source:c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\configuraciontablero.c
+	"configuracionTablero.h"
+
+1757193393 c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\configuraciontablero.h
+	"macros.h"
+	"coordenadas.h"
+	<stdio.h>
+	<string.h>
+
+1757193393 c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\macros.h
+	<stdlib.h>
+
+1757193393 c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\coordenadas.h
+
+1757193393 source:c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\jugador.c
+	"jugador.h"
+
+1757193393 c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\jugador.h
+	"coordenadas.h"
+	"macros.h"
+
+1757288628 source:c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\main.c
+	"tablero.h"
+	"objetos.h"
+	"menu.h"
+
+1757193393 c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\tablero.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"macros.h"
+	"coordenadas.h"
+	"configuracionTablero.h"
+
+1757193393 c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\objetos.h
+	"coordenadas.h"
+	"configuracionTablero.h"
+	"macros.h"
+
+1757288582 c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\menu.h
+	"stdlib.h"
+	"stdio.h"
+
+1757289057 source:c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\menu.c
+	"menu.h"
+
+1757193393 source:c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\objetos.c
+	"objetos.h"
+
+1757193393 source:c:\users\lucianoromano\desktop\facultad\algoritmos\trabajo practico\laberintos_y_fantasmas_ayed\tablero.c
+	"tablero.h"
+	<stdlib.h>
+

@@ -1,5 +1,6 @@
 #include "tablero.h"
 #include "objetos.h"
+#include "menu.h"
 
 void mostrarCharEnPantalla(void *fp, void *elem);
 
@@ -10,6 +11,8 @@ int main()
     tTablero tablero;
     tPosObjeto objetos;
 
+    if(mostrarMenu()==FIN_JUEGO)
+        return 0;
     configuracionTableroCargar(&config,"configs.txt");
     tableroCrear(&tablero,&config);
     tableroInicializar(&tablero, '.');
