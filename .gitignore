@@ -1,11 +1,5 @@
-.vscode/c_cpp_properties.json
-bin/Debug/tableroLaberintosFantasmas.exe
-obj/Debug/colaDinamica.o
-obj/Debug/configuracionTablero.o
-obj/Debug/jugador.o
-obj/Debug/main.o
-obj/Debug/menu.o
-obj/Debug/objetos.o
-obj/Debug/tablero.o
+.vscode/
+bin/
+obj/
 tableroLaberintosFantasmas.depend
 tableroLaberintosFantasmas.layout
