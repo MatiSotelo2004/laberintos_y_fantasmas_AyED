@@ -35,6 +35,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="configuracionTablero.h" />
+		<Unit filename="coordenadas.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="coordenadas.h" />
 		<Unit filename="jugador.c">
 			<Option compilerVar="CC" />
