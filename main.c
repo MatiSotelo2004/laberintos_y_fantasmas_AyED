@@ -26,18 +26,15 @@ int main()
 
     configuracionTableroCargar(&config,"configs.txt");
     tableroCrear(&tablero,&config);
-    tableroInicializar(&tablero, '.');
+    //tableroInicializar(&tablero, '.');
     tableroDibujarParedes(&tablero);
     tCoordenadas coordenadaEntrada = tableroEstablecerEntrada(&tablero);
     tCoordenadas coordenadaSalida =  tableroEstablecerSalida(&tablero);
     objetosCrear(&objetos,&config,&coordenadaEntrada);
 
-    tableroColocarObjetosAleatorio(&tablero, objetoParedesObtenerPunteroCoordenadas(&objetos),
-                                   configuracionTableroObtenerCantidadParedes(&config), CARACTER_PARED);
-    tableroColocarObjetosAleatorio(&tablero, objetoPremioObtenerPunteroCoordenadas(&objetos),
-                                   configuracionTableroObtenerCantidadPremios(&config), CARACTER_PREMIO);
-    tableroColocarObjetosAleatorio(&tablero, objetoVidasObtenerPunteroCoordenadas(&objetos),
-                                   configuracionTableroObtenerCantidadVidas(&config), CARACTER_VIDA);
+    //tableroColocarObjetosAleatorio(&tablero, objetoParedesObtenerPunteroCoordenadas(&objetos),configuracionTableroObtenerCantidadParedes(&config), CARACTER_PARED);
+    tableroColocarObjetosAleatorio(&tablero, objetoPremioObtenerPunteroCoordenadas(&objetos),configuracionTableroObtenerCantidadPremios(&config), CARACTER_PREMIO);
+    tableroColocarObjetosAleatorio(&tablero, objetoVidasObtenerPunteroCoordenadas(&objetos),configuracionTableroObtenerCantidadVidas(&config), CARACTER_VIDA);
 
     tableroColocarObjeto(&tablero,&coordenadaEntrada,CARACTER_JUGADOR);
 

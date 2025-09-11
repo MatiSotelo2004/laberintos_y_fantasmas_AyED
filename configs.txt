@@ -4,4 +4,3 @@ vida_inicial: 2
 fantasmas: 4
 premios: 5
 vida_extra: 6...
-

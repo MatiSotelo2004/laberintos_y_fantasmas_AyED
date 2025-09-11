@@ -64,7 +64,9 @@ void tableroDestruir(tTablero *tablero)
 
 void tableroDibujarParedes(tTablero *tablero)
 {
-    int i;
+    int i, num_paredes, fila_random, col_random;
+
+    //DIBUJA LOS LIMITES
     for(i = 0; i < tablero->limite.x; i++)
     {
         tablero->tablero[i][0] = CARACTER_PARED;
@@ -75,6 +77,36 @@ void tableroDibujarParedes(tTablero *tablero)
         tablero->tablero[0][i] = CARACTER_PARED;
         tablero->tablero[tablero->limite.x-1][i] = CARACTER_PARED;
     }
+
+    //DIBUJA LOS CAMINOS
+    for (i=1; i < tablero->limite.x-1; i++){
+        for(int j=1; j<tablero->limite.y-1;j++){
+            tablero->tablero[i][j] = LUGAR_VACIO;
+        }
+    }
+
+    //DIBUJA LAS PAREDES INTERNAS
+    num_paredes = (tablero->limite.x * tablero->limite.y) / 8; //CALCULA UN % DE PAREDES QUE VA A TENER
+
+    for (int p = 0; p < num_paredes; p++) {
+        int fila_random, col_random;
+        i = 0;
+
+        do {
+            fila_random = 1 + rand() % (tablero->limite.x - 2);
+            col_random = 1 + rand() % (tablero->limite.y - 2);
+            i++;
+        } while ((tablero->tablero[fila_random][col_random] != LUGAR_VACIO ||
+                 // Evitar bloquear la entrada y salida
+                 (fila_random == 1 && col_random == 1) ||
+                 (fila_random == tablero->limite.x-2 && col_random == tablero->limite.y-2)) &&
+                 i < 100);
+
+        if (i < 100) {
+            tablero->tablero[fila_random][col_random] = CARACTER_PARED;
+        }
+    }
+
 }
 
 void tableroInicializar(tTablero *tablero, char caracter)
