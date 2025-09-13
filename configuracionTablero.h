@@ -8,12 +8,12 @@
 typedef struct
 {
     /*
-     • filas: número de filas del tablero
-    • columnas: número de columnas del tablero
-    • vidas_inicio: número de vidas.
-    • maximo_numero_fantasmas: número de fantasmas
-    • maximo_numero_premios: número de premios
-    • maximo_vidas_extra: número de vidas maximo_vidas_extra
+     ï¿½ filas: nï¿½mero de filas del tablero
+    ï¿½ columnas: nï¿½mero de columnas del tablero
+    ï¿½ vidas_inicio: nï¿½mero de vidas.
+    ï¿½ maximo_numero_fantasmas: nï¿½mero de fantasmas
+    ï¿½ maximo_numero_premios: nï¿½mero de premios
+    ï¿½ maximo_vidas_extra: nï¿½mero de vidas maximo_vidas_extra
     */
     tCoordenadas tamTablero;
     unsigned cantVidaInicial;
@@ -24,8 +24,10 @@ typedef struct
 }tConfigTablero;
 
 int configuracionTableroCargar(tConfigTablero *config, const char *nomArch);
-int configuracionTableroObtenerCantidadVidas(const tConfigTablero *config);
+int configuracionTableroObtenerCantidadVidasExtra(const tConfigTablero *config);
 int configuracionTableroObtenerCantidadPremios(const tConfigTablero *config);
 int configuracionTableroObtenerCantidadParedes(const tConfigTablero *config);
+int configuracionTableroObtenerCantidadFantasmas(const tConfigTablero *config);
+int configuracionTableroObtenerCantidadVidasInicial(const tConfigTablero *config);
 
 #endif // CONFIGURACIONTABLERO_H_INCLUDED

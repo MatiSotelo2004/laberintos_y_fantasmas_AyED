@@ -2,7 +2,7 @@
 #include "coordenadas.h"
 #include <stdlib.h>
 
-tCoordenadas tableroEstablecerEntrada(tTablero *tablero)
+tCoordenadas tableroSetearEntrada(tTablero *tablero)
 {
     int posColumna;
     OBTENER_NUM_ALEATORIO(1, tablero->limite.x - 1,posColumna);
@@ -13,7 +13,7 @@ tCoordenadas tableroEstablecerEntrada(tTablero *tablero)
     return coordenada;
 }
 
-tCoordenadas tableroEstablecerSalida(tTablero *tablero)
+tCoordenadas tableroSetearSalida(tTablero *tablero)
 {
     int posColumna;
     OBTENER_NUM_ALEATORIO(1, tablero->limite.x - 1,posColumna);
@@ -95,7 +95,7 @@ void tableroImprimir(const tTablero *tablero, FILE* fp, Accion mostrar)
         for(j = 0; j < tablero->limite.y; j++)
             mostrar(fp,&tablero->tablero[i][j]);
 
-        puts("");
+        fprintf(fp,"\n");
     }
 }
 
@@ -130,8 +130,9 @@ void tableroVerObjeto(const tTablero *tablero, const tCoordenadas *coords, char 
 {
     if(coords->x < tablero->limite.x && coords->y < tablero->limite.y)
         *dest = tablero->tablero[coords->x][coords->y];
+    else
+        *dest = CARACTER_INVALIDO;
 
-    dest = NULL;
 }
 
 int tableroColocarObjeto(tTablero *tablero, const tCoordenadas *obj, char caracter)
@@ -139,7 +140,7 @@ int tableroColocarObjeto(tTablero *tablero, const tCoordenadas *obj, char caract
     if(obj->x > tablero->limite.x || obj->y > tablero->limite.y)
         return POSICION_NO_DISPONIBLE;
 
-    if(tablero->tablero[obj->x][obj->y] == CARACTER_PARED)
+    if(tablero->tablero[obj->x][obj->y] == CARACTER_PARED && caracter != CARACTER_ENTRADA && caracter != CARACTER_SALIDA)
         return POSICION_NO_DISPONIBLE;
 
     tablero->tablero[obj->x][obj->y] = caracter;

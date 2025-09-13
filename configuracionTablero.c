@@ -12,13 +12,13 @@ int configuracionTableroCargar(tConfigTablero *config, const char *nomArch)
 
     /*
      Un ejemplo del archivo de texto que describe laberinto con los siguientes valores en los
-    parámetros iniciales:
-    • filas: 10
-    • columnas: 10
-    • vidas_inicio: 3.
-    • maximo_numero_fantasmas: 2
-    • maximo_numero_premios: 1
-    • maximo_vidas_extra: 1
+    parï¿½metros iniciales:
+    ï¿½ filas: 10
+    ï¿½ columnas: 10
+    ï¿½ vidas_inicio: 3.
+    ï¿½ maximo_numero_fantasmas: 2
+    ï¿½ maximo_numero_premios: 1
+    ï¿½ maximo_vidas_extra: 1
     */
 
     while(fgets(buffer,TAM_BUFFER,fp))
@@ -85,7 +85,17 @@ int configuracionTableroObtenerCantidadPremios(const tConfigTablero *config)
    return config->cantPremio;
 }
 
-int configuracionTableroObtenerCantidadVidas(const tConfigTablero *config)
+int configuracionTableroObtenerCantidadVidasInicial(const tConfigTablero *config)
+{
+   return config->cantVidaInicial;
+}
+
+int configuracionTableroObtenerCantidadVidasExtra(const tConfigTablero *config)
 {
    return config->cantVidaExtra;
+}
+
+int configuracionTableroObtenerCantidadFantasmas(const tConfigTablero *config)
+{
+   return config->cantFant;
 }
