@@ -1,5 +1,6 @@
-#include "tablero.h"
-#include "objetos.h"
+//#include "tablero.h"
+#include "tablero_v2.h"
+//#include "objetos.h"
 #include "menu.h"
 
 void mostrarCharEnPantalla(void *fp, void *elem);
@@ -18,29 +19,15 @@ int main()
      */
     srand(time(NULL));
     tConfigTablero config;
-    tTablero tablero;
-    tPosObjeto objetos;
+    tLaberinto tablero;
+    //tPosObjeto objetos;
 
-    if(mostrarMenu()==FIN_JUEGO)
-        return 0;
 
-    configuracionTableroCargar(&config,"configs.txt");
-    tableroCrear(&tablero,&config);
-    //tableroInicializar(&tablero, '.');
-    tableroDibujarParedes(&tablero);
-    tCoordenadas coordenadaEntrada = tableroEstablecerEntrada(&tablero);
-    tCoordenadas coordenadaSalida =  tableroEstablecerSalida(&tablero);
-    objetosCrear(&objetos,&config,&coordenadaEntrada);
+    cargarConfig(&config, "configs.txt");
+    inicializarTablero(&tablero, &config);
+    generarLab(&tablero);
+    destruirTablero(&tablero);
 
-    //tableroColocarObjetosAleatorio(&tablero, objetoParedesObtenerPunteroCoordenadas(&objetos),configuracionTableroObtenerCantidadParedes(&config), CARACTER_PARED);
-    tableroColocarObjetosAleatorio(&tablero, objetoPremioObtenerPunteroCoordenadas(&objetos),configuracionTableroObtenerCantidadPremios(&config), CARACTER_PREMIO);
-    tableroColocarObjetosAleatorio(&tablero, objetoVidasObtenerPunteroCoordenadas(&objetos),configuracionTableroObtenerCantidadVidas(&config), CARACTER_VIDA);
-
-    tableroColocarObjeto(&tablero,&coordenadaEntrada,CARACTER_JUGADOR);
-
-    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
-    tableroDestruir(&tablero);
-    objetosDestruir(&objetos);
     return 0;
 }
 

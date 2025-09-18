@@ -1,6 +1,6 @@
-filas: 20
-columnas: 40
+filas: 45
+columnas: 45
 vida_inicial: 2
 fantasmas: 4
 premios: 5
-vida_extra: 6...
+vida_extra: 6

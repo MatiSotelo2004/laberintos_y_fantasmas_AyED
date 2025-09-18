@@ -52,10 +52,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="objetos.h" />
+		<Unit filename="pilad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pilad.h" />
 		<Unit filename="tablero.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="tablero.h" />
+		<Unit filename="tablero_v2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="tablero_v2.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

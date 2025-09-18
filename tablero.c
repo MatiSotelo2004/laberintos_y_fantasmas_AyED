@@ -177,3 +177,4 @@ int tableroColocarObjeto(tTablero *tablero, const tCoordenadas *obj, char caract
     tablero->tablero[obj->x][obj->y] = caracter;
     return TODO_OK;
 }
+
