@@ -13,6 +13,7 @@
 #define ENTRADA 'e'
 #define SALIDA 's'
 
+#define CANTCAM 4
 
 typedef struct
 {
@@ -73,5 +74,7 @@ void cantidadVecinos(tLaberinto*);
 void generarLab(tLaberinto*);
 
 void destruirTablero(tLaberinto*tab);
+
+void caminosRandom(tLaberinto*);
 
 #endif // TABLERO_V2_H_INCLUDED

@@ -53,7 +53,7 @@ void cantidadVecinos(tLaberinto* lab)
 
 void generarLab(tLaberinto* lab)
 {
-    int random;
+    int random,i;
 
     crearLab(lab);
     llenarLabParedes(lab);
@@ -105,4 +105,62 @@ void generarLab(tLaberinto* lab)
     }
 
     mostrarLab(lab);
+    printf("\n\n\n");
+
+    //Limpiar entrada
+
+    lab->actual.fila = lab->entrada.fila + 1;
+    lab->actual.columna = lab->entrada.columna;
+    if((lab->actual.columna - 1 > 0) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna - 1] = CAMINO;
+    }
+    if((lab->actual.columna + 1 < lab->columnasTotales - 1) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna + 1] = CAMINO;
+    }
+    if((lab->mat[lab->actual.fila + 1][lab->actual.columna] == PARED))
+    {
+        lab->mat[lab->actual.fila + 1][lab->actual.columna] = CAMINO;
+    }
+
+    //Limpiar salida
+
+    lab->actual.fila = lab->salida.fila - 1;
+    lab->actual.columna = lab->salida.columna;
+    if((lab->actual.columna - 1 > 0) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna - 1] = CAMINO;
+    }
+    if((lab->actual.columna + 1 < lab->columnasTotales - 1) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna + 1] = CAMINO;
+    }
+    if((lab->mat[lab->actual.fila - 1][lab->actual.columna] == PARED))
+    {
+        lab->mat[lab->actual.fila - 1][lab->actual.columna] = CAMINO;
+    }
+
+    caminosRandom(lab);
+
+    mostrarLab(lab);
 }
+
+void caminosRandom(tLaberinto* lab)
+{
+    int i=0,ran;
+    while(i < CANTCAM)
+    {
+        ran = rand() % ((lab->filasTotales - 2)/2) * 2 + 2;
+        lab->actual.fila = ran;
+        ran = rand() % ((lab->columnasTotales - 2)/2) * 2 + 2;
+        lab->actual.columna = ran;
+        if((((lab->mat[lab->actual.fila - 1][lab->actual.columna] == CAMINO) && (lab->mat[lab->actual.fila + 1][lab->actual.columna] == CAMINO) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == PARED) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == PARED))||((lab->mat[lab->actual.fila - 1][lab->actual.columna] == PARED) && (lab->mat[lab->actual.fila + 1][lab->actual.columna] == PARED) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == CAMINO) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == CAMINO)))&& lab->mat[lab->actual.fila][lab->actual.columna] == PARED)
+        {
+            lab->mat[lab->actual.fila][lab->actual.columna] = CAMINO;
+            i++;
+        }
+    }
+}
+
+

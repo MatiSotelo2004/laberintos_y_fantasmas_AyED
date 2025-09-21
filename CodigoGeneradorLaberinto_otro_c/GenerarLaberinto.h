@@ -3,8 +3,9 @@
 
 #include "Headers.h"
 
-#define FILASTOT 21
-#define COLTOT 21
+#define FILASTOT 15
+#define COLTOT 15
+#define CANTCAM 4
 
 #define PARED '#'
 #define CAMINO '.'
@@ -16,5 +17,5 @@ void crearLab(tLaberinto*);
 void llenarLabParedes(tLaberinto*);
 void cantidadVecinos(tLaberinto*);
 void generarLab(tLaberinto*);
-
+void caminosRandom(tLaberinto*);
 #endif // GENERARLABERINTO_H_INCLUDED

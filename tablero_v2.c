@@ -158,6 +158,42 @@ void generarLab(tLaberinto* lab)
         cantidadVecinos(lab);
     }
 
+    //Limpiar entrada
+
+    lab->actual.fila = lab->entrada.fila + 1;
+    lab->actual.columna = lab->entrada.columna;
+    if((lab->actual.columna - 1 > 0) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna - 1] = CAMINO;
+    }
+    if((lab->actual.columna + 1 < lab->columnasTotales - 1) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna + 1] = CAMINO;
+    }
+    if((lab->mat[lab->actual.fila + 1][lab->actual.columna] == PARED))
+    {
+        lab->mat[lab->actual.fila + 1][lab->actual.columna] = CAMINO;
+    }
+
+    //Limpiar salida
+
+    lab->actual.fila = lab->salida.fila - 1;
+    lab->actual.columna = lab->salida.columna;
+    if((lab->actual.columna - 1 > 0) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna - 1] = CAMINO;
+    }
+    if((lab->actual.columna + 1 < lab->columnasTotales - 1) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == PARED))
+    {
+        lab->mat[lab->actual.fila][lab->actual.columna + 1] = CAMINO;
+    }
+    if((lab->mat[lab->actual.fila - 1][lab->actual.columna] == PARED))
+    {
+        lab->mat[lab->actual.fila - 1][lab->actual.columna] = CAMINO;
+    }
+
+    caminosRandom(lab);
+
     destruirPila(&historial);
     mostrarLab(lab);
 }
@@ -167,5 +203,23 @@ void destruirTablero(tLaberinto*tab){
         free(tab->mat[i]);
     }
     free(tab->mat);
+}
+
+void caminosRandom(tLaberinto* lab) //la cantidad de caminos esta con una macro en tablero.v2.h capas conviene cargarlos en archivo y preguntar ahi la cantidad de caminos random, capas abria un error si son tableros chicos con muchos caminos random
+{ //capas conviene que la cantidad de caminos random se saque de una formula, ejemplo col*fil / 100 o algo asi
+    int i=0,ran;
+    while(i < CANTCAM)
+    {
+        ran = rand() % ((lab->filasTotales - 2)/2) * 2 + 2;
+        lab->actual.fila = ran;
+        ran = rand() % ((lab->columnasTotales - 2)/2) * 2 + 2;
+        lab->actual.columna = ran;
+        if((((lab->mat[lab->actual.fila - 1][lab->actual.columna] == CAMINO) && (lab->mat[lab->actual.fila + 1][lab->actual.columna] == CAMINO) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == PARED) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == PARED))||((lab->mat[lab->actual.fila - 1][lab->actual.columna] == PARED) && (lab->mat[lab->actual.fila + 1][lab->actual.columna] == PARED) && (lab->mat[lab->actual.fila][lab->actual.columna + 1] == CAMINO) && (lab->mat[lab->actual.fila][lab->actual.columna - 1] == CAMINO)))&& lab->mat[lab->actual.fila][lab->actual.columna] == PARED)
+        {
+//            printf("%d %d \n",lab->actual.fila,lab->actual.columna);
+            lab->mat[lab->actual.fila][lab->actual.columna] = CAMINO;
+            i++;
+        }
+    }
 }
 

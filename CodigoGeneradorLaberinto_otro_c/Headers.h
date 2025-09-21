@@ -7,7 +7,7 @@
 
 #define FILASMAXIMAS 41
 #define COLUMNASMAXIMAS 41
-#define TAMVEC 100
+#define TAMVEC 300
 
 typedef struct
 {
