@@ -1,10 +1,5 @@
 .vscode/
 bin/
 obj/
-<<<<<<< Updated upstream
-tableroLaberintosFantasmas.depend
-tableroLaberintosFantasmas.layout
-=======
 *.depend
 *.layout
->>>>>>> Stashed changes

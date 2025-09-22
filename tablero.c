@@ -2,31 +2,6 @@
 #include "coordenadas.h"
 #include <stdlib.h>
 
-<<<<<<< Updated upstream
-tCoordenadas tableroSetearEntrada(tTablero *tablero)
-{
-    int posColumna;
-    OBTENER_NUM_ALEATORIO(1, tablero->limite.x - 1,posColumna);
-    tablero->tablero[0][posColumna] = CARACTER_ENTRADA;
-    tCoordenadas coordenada;
-    coordenada.x = 0;
-    coordenada.y = posColumna;
-    return coordenada;
-}
-
-tCoordenadas tableroSetearSalida(tTablero *tablero)
-{
-    int posColumna;
-    OBTENER_NUM_ALEATORIO(1, tablero->limite.x - 1,posColumna);
-    tablero->tablero[tablero->limite.x-1][posColumna] = CARACTER_SALIDA;
-    tCoordenadas coordenada;
-    coordenada.x = tablero->limite.x-1;
-    coordenada.y = posColumna;
-    return coordenada;
-}
-
-=======
->>>>>>> Stashed changes
 int tableroCrear(tTablero *tablero, const tConfigTablero *config)
 {
     char **i;
@@ -68,11 +43,7 @@ void tableroDestruir(tTablero *tablero)
 void tableroDibujarParedes(tTablero *tablero)
 {
     int i;
-<<<<<<< Updated upstream
-    for(i = 0; i < tablero->limite.x; i++)
-=======
     for(i = 0; i < tablero->limite.x ; i++)
->>>>>>> Stashed changes
     {
         tablero->tablero[i][0] = CARACTER_PARED;
         tablero->tablero[i][tablero->limite.y-1] = CARACTER_PARED;

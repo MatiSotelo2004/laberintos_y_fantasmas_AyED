@@ -37,7 +37,4 @@
 #define miToUpper(x) (((x)>='a')?((x)-('a'-'A')):(x))
 #define FIN_JUEGO 1
 #define TODO_OK 0
-<<<<<<< Updated upstream
-=======
 #define CANTCAM 20
->>>>>>> Stashed changes

@@ -54,34 +54,6 @@ void coordenadaEjecutarMovimiento(tCoordenadas *cord, char movimiento)
 void coordenadasMovimientoRecomendado(const tCoordenadas *puntoA, const tCoordenadas *puntoB, tCoordenadas *dst)
 {
     double menorDistancia;
-<<<<<<< Updated upstream
-
-    if(DISTANCIA(dst->x-1,puntoB->x,puntoA->y,puntoB->y) < DISTANCIA(dst->x+1,puntoB->x,puntoA->y,puntoB->y))
-    {
-        menorDistancia = DISTANCIA(dst->x-1,puntoB->x,puntoA->y,puntoB->y);
-        dst->x = puntoA->x - 1; 
-    }else
-    {
-        menorDistancia = DISTANCIA(dst->x+1,puntoB->x,puntoA->y,puntoB->y);
-        dst->x = puntoA->x + 1; 
-    }
-
-    dst->y = puntoA->y; 
-
-    if(DISTANCIA(puntoA->x,puntoB->x,dst->x-1,puntoB->y) <= menorDistancia)
-    {
-        dst->x = puntoA->x;
-        menorDistancia = DISTANCIA(puntoA->x,puntoB->x,puntoA->y-1,puntoB->y);
-        if(DISTANCIA(puntoA->x,puntoB->x,puntoA->y+1,puntoB->y) < menorDistancia)
-        {
-            dst->y = puntoA->y+1; 
-        }else
-        {
-            dst->y = puntoA->y-1;
-        }
-    }
-}
-=======
     double distanciaEnXDerecha = DISTANCIA(dst->x+1,puntoB->x,puntoA->y,puntoB->y);
     double distanciaEnXIzquierda = DISTANCIA(dst->x-1,puntoB->x,puntoA->y,puntoB->y);
     double distanciaEnYArriba = DISTANCIA(dst->x,puntoB->x,puntoA->y+1,puntoB->y);
@@ -107,4 +79,3 @@ void coordenadasMovimientoRecomendado(const tCoordenadas *puntoA, const tCoorden
             dst->y = puntoA->y-1;
     }
 }
->>>>>>> Stashed changes

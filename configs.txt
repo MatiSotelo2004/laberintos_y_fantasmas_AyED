@@ -2,11 +2,6 @@ filas: 21
 columnas: 41
 vida_inicial: 2
 fantasmas: 1
-<<<<<<< Updated upstream
-premios: 0
-vida_extra: 0...
-=======
 premios: 2
 vida_extra: 2...
->>>>>>> Stashed changes
 
