@@ -59,4 +59,22 @@ void jugadorMover(tJugador *j, const tCoordenadas *dst)
 {
     j->posicionActual.x = dst->x;
     j->posicionActual.y = dst->y;
+<<<<<<< Updated upstream
+=======
+}
+
+void jugadorSumarPuntaje(tJugador *j)
+{
+    j->puntaje++;
+}
+
+void jugadorSumarVida(tJugador *j)
+{
+    j->vidas++;
+}
+
+void jugadorRestarVida(tJugador *j)
+{
+    j->vidas--;
+>>>>>>> Stashed changes
 }

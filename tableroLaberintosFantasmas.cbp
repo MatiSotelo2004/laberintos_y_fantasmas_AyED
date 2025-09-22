@@ -55,6 +55,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="objetos.h" />
+		<Unit filename="pilad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pilad.h" />
 		<Unit filename="tablero.c">
 			<Option compilerVar="CC" />
 		</Unit>

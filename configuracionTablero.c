@@ -69,15 +69,10 @@ int configuracionTableroCargar(tConfigTablero *config, const char *nomArch)
         iterador++;
     }
 
-    OBTENER_NUM_ALEATORIO(0, MAX_CANT_PAREDES, config->cantParedes);
+    //OBTENER_NUM_ALEATORIO(0, MAX_CANT_PAREDES, config->cantParedes);
     fclose(fp);
     return  TODO_OK;
 
-}
-
-int configuracionTableroObtenerCantidadParedes(const tConfigTablero *config)
-{
-   return config->cantParedes;
 }
 
 int configuracionTableroObtenerCantidadPremios(const tConfigTablero *config)

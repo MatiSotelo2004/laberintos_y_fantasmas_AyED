@@ -25,5 +25,11 @@ tCoordenadas jugadorCoordenadas(const tJugador *j);
 void jugadorReemplazarCoordenadas(tJugador *jugador, const tCoordenadas *dst);
 const tCoordenadas* jugadorCoordenadasPuntero(const tJugador *j);
 void jugadorMover(tJugador *j, const tCoordenadas *dst);
+<<<<<<< Updated upstream
+=======
+void jugadorSumarPuntaje(tJugador *j);
+void jugadorSumarVida(tJugador *j);
+void jugadorRestarVida(tJugador *j);
+>>>>>>> Stashed changes
 
 #endif // JUGADOR_H_INCLUDED

@@ -12,7 +12,7 @@
 #define ES_NUMERO(X) ((X) >= '0' && (X) <= '9')
 #define OBTENER_NUM_ALEATORIO(MIN,MAX,DST) \
     ((DST) = (rand() % ((MAX) - (MIN))) + (MIN))
-#define LUGAR_VACIO '.'
+#define LUGAR_VACIO ' '
 #define CARACTER_JUGADOR 'J'
 #define CARACTER_FANTASMA 'F'
 #define CARACTER_VIDA 'V'
@@ -37,3 +37,7 @@
 #define miToUpper(x) (((x)>='a')?((x)-('a'-'A')):(x))
 #define FIN_JUEGO 1
 #define TODO_OK 0
+<<<<<<< Updated upstream
+=======
+#define CANTCAM 20
+>>>>>>> Stashed changes

@@ -7,13 +7,25 @@
 #include "macros.h"
 #include "coordenadas.h"
 #include "configuracionTablero.h"
+#include "pilad.h"
+
 
 typedef void (*Accion)(void *elem, void *extra);
 
 typedef struct
 {
-    char **tablero;
-    tCoordenadas limite;
+    unsigned cantidad;
+    tCoordenadas vecino[4];
+}tVecinos;
+
+typedef struct
+{
+    char **tablero; //apunta al inicio del laberinto
+    tCoordenadas limite; //filas y columnas totales del laberinto
+    tCoordenadas entrada; //cordenadas de la entrada
+    tCoordenadas salida; //cordenadas de la salida
+    tCoordenadas actual; //cordenadas de la casilla en la que estoy parado
+    tVecinos vecinos;
 }tTablero;
 
 //////////////////////////////////////////////////////////////////
@@ -25,10 +37,18 @@ void tableroInicializar(tTablero *tablero, char caracter);
 void tableroImprimir(const tTablero *tablero, FILE *fp, Accion mostrar);
 int tableroPosicionEstaDisponible(const tTablero *tablero, const tCoordenadas *coords);
 void tableroColocarObjetosAleatorio(tTablero *tablero, tCoordenadas *coords, unsigned cantObj, char caracter);
+<<<<<<< Updated upstream
 tCoordenadas tableroSetearEntrada(tTablero *tablero);
 tCoordenadas tableroSetearSalida(tTablero *tablero);
+=======
+>>>>>>> Stashed changes
 void tableroVerObjeto(const tTablero *tablero, const tCoordenadas *coords, char *dest);
 int tableroColocarObjeto(tTablero *tablero, const tCoordenadas *obj, char caracter);
+void cantidadVecinos(tTablero* lab);
+void generarLab(tTablero* lab);
+void caminosRandom(tTablero* lab);
+tCoordenadas tableroEntrada(const tTablero *tablero);
+tCoordenadas tableroSalida(const tTablero *tablero);
 //////////////////////////////////////////////////////////////////
 ///
 
