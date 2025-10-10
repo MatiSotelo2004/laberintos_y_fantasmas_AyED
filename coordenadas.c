@@ -54,26 +54,26 @@ void coordenadaEjecutarMovimiento(tCoordenadas *cord, char movimiento)
 void coordenadasMovimientoRecomendado(const tCoordenadas *puntoA, const tCoordenadas *puntoB, tCoordenadas *dst)
 {
     double menorDistancia;
-    double distanciaEnXDerecha = DISTANCIA(dst->x+1,puntoB->x,puntoA->y,puntoB->y);
-    double distanciaEnXIzquierda = DISTANCIA(dst->x-1,puntoB->x,puntoA->y,puntoB->y);
-    double distanciaEnYArriba = DISTANCIA(dst->x,puntoB->x,puntoA->y+1,puntoB->y);
-    double distanciaEnYAbajo = DISTANCIA(dst->x,puntoB->x,puntoA->y-1,puntoB->y);
+    double distanciaEnXArriba = DISTANCIA(dst->x+1,puntoB->x,puntoA->y,puntoB->y);
+    double distanciaEnXAbajo = DISTANCIA(dst->x-1,puntoB->x,puntoA->y,puntoB->y);
+    double distanciaEnYDerecha = DISTANCIA(dst->x,puntoB->x,puntoA->y+1,puntoB->y);
+    double distanciaEnYIzquierda = DISTANCIA(dst->x,puntoB->x,puntoA->y-1,puntoB->y);
     
     dst->y = puntoA->y;
-    if(distanciaEnXDerecha < distanciaEnXIzquierda)
+    if(distanciaEnXArriba < distanciaEnXAbajo)
     {
-        menorDistancia = distanciaEnXDerecha;
+        menorDistancia = distanciaEnXArriba;
         dst->x = puntoA->x + 1;
     }else
     {
-        menorDistancia = distanciaEnXIzquierda;
+        menorDistancia = distanciaEnXAbajo;
         dst->x = puntoA->x - 1;
     }
 
-    if(distanciaEnYArriba < menorDistancia || distanciaEnYAbajo < menorDistancia)
+    if(distanciaEnYDerecha < menorDistancia || distanciaEnYIzquierda < menorDistancia)
     {
         dst->x = puntoA->x;
-        if(distanciaEnYArriba < distanciaEnYAbajo)
+        if(distanciaEnYDerecha < distanciaEnYIzquierda)
             dst->y = puntoA->y+1;
         else
             dst->y = puntoA->y-1;

@@ -9,13 +9,7 @@
 #define ERROR 1
 #define TAM_PILA 1000
 
-#define MIN(X, Y)((X) < (Y) ? (X) : (Y))
-
-typedef struct sNodo{
-    void *dato;
-    unsigned tamDato;
-    struct sNodo *sig;
-}tNodo;
+#include "nodo.h"
 
 typedef tNodo *tpila;
 

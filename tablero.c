@@ -186,7 +186,7 @@ void generarLab(tTablero* lab)
             lab->actual.y = lab->vecinos.vecino[random].y;
 
             lab->tablero[lab->actual.x][lab->actual.y] = LUGAR_VACIO;
-            lab->tablero[(lab->actual.x + coordHisto.x) / 2 ][(lab->actual.y + coordHisto.y) / 2] = LUGAR_VACIO;
+            lab->tablero[(lab->actual.x + coordHisto.x)>>1][(lab->actual.y + coordHisto.y)>>1] = LUGAR_VACIO;
 
             apilarPila(&historial, &coordHisto, sizeof(tCoordenadas));
         }
@@ -264,4 +264,49 @@ tCoordenadas tableroEntrada(const tTablero *tablero)
 tCoordenadas tableroSalida(const tTablero *tablero)
 {
     return tablero->salida;
+}
+
+tCoordenadas* tableroObtenerMovimientoPosible(const tTablero *tablero, const tCoordenadas *coords)
+{
+    tCoordenadas *disponible;
+
+    if (coords->x < 0 || coords->x >= tablero->limite.x || coords->y < 0 || coords->y >= tablero->limite.y)
+        return NULL;
+
+    short int actualX;
+    short int actualY;
+    short int cantMovimientosPosibles;
+    tCoordenadas desplazamientosPosibles[] =
+    {
+        {1,0},
+        {-1,0},
+        {0,1},
+        {0,-1},
+        {1,1},
+        {-1,1},
+        {1,-1},
+        {-1,-1}
+    };
+
+    cantMovimientosPosibles = sizeof(desplazamientosPosibles) / sizeof(tCoordenadas);
+    disponible = (tCoordenadas*)malloc(sizeof(tCoordenadas) * 8);
+    if(!disponible)
+        return NULL;
+
+    for(int i = 0; i < cantMovimientosPosibles  ; i++)
+    {
+        actualX = coords->x + desplazamientosPosibles[i].x;
+        actualY = coords->y + desplazamientosPosibles[i].y;
+
+        if(actualX >= 0 && actualX < tablero->limite.x
+        && actualY >= 0 && actualY < tablero->limite.y
+        && tablero->tablero[actualX][actualY] == LUGAR_VACIO)
+        {
+            (disponible+i)->x = actualX;
+            (disponible+i)->y = actualY;
+        }else
+            (disponible+i)->x = (disponible+i)->y = POSICION_NO_DISPONIBLE;
+    }
+
+    return disponible;
 }

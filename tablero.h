@@ -44,6 +44,7 @@ void generarLab(tTablero* lab);
 void caminosRandom(tTablero* lab);
 tCoordenadas tableroEntrada(const tTablero *tablero);
 tCoordenadas tableroSalida(const tTablero *tablero);
+tCoordenadas* tableroObtenerMovimientoPosible(const tTablero *tablero, const tCoordenadas *coords);
 //////////////////////////////////////////////////////////////////
 ///
 

@@ -7,8 +7,8 @@
 
 typedef struct
 {
-    unsigned x;
-    unsigned y;
+    int x;
+    int y;
 }tCoordenadas;
 
 unsigned obtenerDistancia(const tCoordenadas *c1 , const tCoordenadas *c2);

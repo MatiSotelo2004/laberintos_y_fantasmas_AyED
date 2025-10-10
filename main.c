@@ -1,7 +1,5 @@
-#include "tablero.h"
-#include "objetos.h"
 #include "menu.h"
-#include "jugador.h"
+#include "Comun.h"
 
 void mostrarCharEnPantalla(void *fp, void *elem);
 
@@ -24,6 +22,10 @@ int main()
     tJugador jugador;
     char movimiento;
     char objetoEnPosicionSeleccionada;
+    int i;
+    tCola colaMovimientos;
+
+    crearCola(&colaMovimientos);
 
     //if(mostrarMenu()==FIN_JUEGO)
         //return 0;
@@ -36,18 +38,17 @@ int main()
     tCoordenadas coordenadaEntrada = tableroEntrada(&tablero);
     tCoordenadas coordenadaSalida =  tableroSalida(&tablero);
     tCoordenadas coordenadaFantasmaAux;
-    //unsigned cantParedes = configuracionTableroObtenerCantidadParedes(&config);
+
     unsigned cantPremios = configuracionTableroObtenerCantidadPremios(&config);
     unsigned cantVidasInicial = configuracionTableroObtenerCantidadVidasInicial(&config);
     unsigned cantVidasExtra = configuracionTableroObtenerCantidadVidasExtra(&config);
-    //unsigned cantFantasmas = configuracionTableroObtenerCantidadFantasmas(&config);
+    unsigned cantFantasmas = configuracionTableroObtenerCantidadFantasmas(&config);
     objetosCrear(&objetos,&config,&coordenadaEntrada);
     jugadorCrear(&jugador);
 
-    //tableroColocarObjetosAleatorio(&tablero, objetoParedesObtenerPunteroCoordenadas(&objetos), cantParedes, CARACTER_PARED);
     tableroColocarObjetosAleatorio(&tablero, objetoPremioObtenerPunteroCoordenadas(&objetos), cantPremios, CARACTER_PREMIO);
     tableroColocarObjetosAleatorio(&tablero, objetoVidasObtenerPunteroCoordenadas(&objetos), cantVidasExtra, CARACTER_VIDA);
-//    tableroColocarObjetosAleatorio(&tablero, objetoFantasmasObtenerPunteroCoordenadas(&objetos), cantFantasmas, CARACTER_FANTASMA);
+    tableroColocarObjetosAleatorio(&tablero, objetoFantasmasObtenerPunteroCoordenadas(&objetos,0), cantFantasmas, CARACTER_FANTASMA);
 
     jugadorInicializar(&jugador,&coordenadaEntrada,cantVidasInicial);
     tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
@@ -55,7 +56,7 @@ int main()
     tCoordenadas jugadorCoordsAux = jugadorCoordenadas(&jugador);
     tableroColocarObjeto(&tablero,&coordenadaEntrada,CARACTER_ENTRADA);
 
-    while(!coordenadasSonIguales(&coordenadaSalida,jugadorCoordenadasPuntero(&jugador)) && cantVidasInicial != 0 && movimiento != '?')
+    while(!coordenadasSonIguales(&coordenadaSalida,jugadorCoordenadasPuntero(&jugador)) && jugadorCantVidas(&jugador) > 0 && movimiento != '?')
     {
         //la condicion de fin con el movimiento y el signo de pregunta es para que cuando hagamos pruebas "terminemos" el juego sin tener que llegar a la meta
         do
@@ -67,7 +68,7 @@ int main()
         coordenadaEjecutarMovimiento(&jugadorCoordsAux,movimiento);
         tableroVerObjeto(&tablero,&jugadorCoordsAux,&objetoEnPosicionSeleccionada);
 
-        if(objetoEnPosicionSeleccionada != CARACTER_PARED && objetoEnPosicionSeleccionada != CARACTER_INVALIDO)
+        if(objetoEnPosicionSeleccionada != CARACTER_PARED) //&& objetoEnPosicionSeleccionada != CARACTER_INVALIDO)
         {
             if(objetoEnPosicionSeleccionada == CARACTER_PREMIO)
                 jugadorSumarPuntaje(&jugador);
@@ -79,29 +80,36 @@ int main()
             else
                 tableroColocarObjeto(&tablero,jugadorCoordenadasPuntero(&jugador),LUGAR_VACIO);
 
-            coordenadaFantasmaAux = objetoFantasmasObtenerCoordenadas(&objetos,0);//el 0 es cuál de todos los punteros de fantasma quiero
 
-            coordenadasMovimientoRecomendado(&coordenadaFantasmaAux,jugadorCoordenadasPuntero(&jugador),
-            &coordenadaFantasmaAux);
 
-            tableroVerObjeto(&tablero,&coordenadaFantasmaAux,&objetoEnPosicionSeleccionada);
-            if(objetoEnPosicionSeleccionada != CARACTER_PARED
-                && objetoEnPosicionSeleccionada != CARACTER_PREMIO
-                && objetoEnPosicionSeleccionada != CARACTER_VIDA)
+            for(i = 0; i < cantFantasmas && !coordenadasSonIguales(&jugadorCoordsAux,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i)); i++)
             {
-                tableroColocarObjeto(&tablero,objetoFantasmasObtenerPunteroCoordenadas(&objetos),LUGAR_VACIO);
-                tableroColocarObjeto(&tablero,&coordenadaFantasmaAux,CARACTER_FANTASMA);
-                coordenadasCopiar(&coordenadaFantasmaAux,objetoFantasmasObtenerPunteroCoordenadas(&objetos));
+                coordenadaFantasmaAux = objetoFantasmasObtenerCoordenadas(&objetos,i);
+                coordenadaFantasmaAux = fantasmaObtenerSiguienteMovimiento(&tablero,&coordenadaFantasmaAux,&jugadorCoordsAux);
+
+                tableroVerObjeto(&tablero,&coordenadaFantasmaAux,&objetoEnPosicionSeleccionada);
+                if(objetoEnPosicionSeleccionada != CARACTER_PARED
+                    && objetoEnPosicionSeleccionada != CARACTER_PREMIO
+                    && objetoEnPosicionSeleccionada != CARACTER_VIDA
+                    && objetoEnPosicionSeleccionada != CARACTER_FANTASMA)
+                {
+                    ponerCola(&colaMovimientos,&coordenadaFantasmaAux,sizeof(tCoordenadas));
+                    tableroColocarObjeto(&tablero,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i),LUGAR_VACIO);
+                    // tableroColocarObjeto(&tablero,&coordenadaFantasmaAux,CARACTER_FANTASMA);
+                    coordenadasCopiar(&coordenadaFantasmaAux,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i));
+                }
+
+                if(coordenadasSonIguales(&jugadorCoordsAux,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i)))
+                {
+                    jugadorRestarVida(&jugador);
+                    coordenadasCopiar(&coordenadaEntrada,&jugadorCoordsAux);
+
+                }
             }
 
-            if(coordenadasSonIguales(&jugadorCoordsAux,&coordenadaFantasmaAux))
-            {
-                jugadorRestarVida(&jugador);
-                coordenadasCopiar(&coordenadaEntrada,&jugadorCoordsAux);
-            }
-
-            tableroColocarObjeto(&tablero,&jugadorCoordsAux,CARACTER_JUGADOR);
-            jugadorMover(&jugador,&jugadorCoordsAux);
+            ponerCola(&colaMovimientos,&jugadorCoordsAux,sizeof(tCoordenadas));
+            //tableroColocarObjeto(&tablero,&jugadorCoordsAux,CARACTER_JUGADOR);
+            actualizarMovimientosTableroDesdeCola(&colaMovimientos,&tablero, &jugador);
 
             tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
             puts("\n\n\n\n");
@@ -110,6 +118,7 @@ int main()
 
     }
 
+    vaciarCola(&colaMovimientos);
     tableroDestruir(&tablero);
     objetosDestruir(&objetos);
     return 0;

@@ -75,3 +75,8 @@ void jugadorRestarVida(tJugador *j)
 {
     j->vidas--;
 }
+
+int jugadorCantVidas(const tJugador *j)
+{
+    return j->vidas;
+}

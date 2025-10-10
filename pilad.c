@@ -20,7 +20,7 @@ int apilarPila(tpila *pila, const void *dato, unsigned tamDato)
     }
 
     memcpy(datoTemp->dato, dato, tamDato);
-    datoTemp->tamDato = tamDato;
+    datoTemp->tam = tamDato;
     datoTemp->sig = *pila;
     *pila = datoTemp;
 
@@ -33,7 +33,7 @@ int desapilarPila(tpila *pila, void *dato, unsigned tamDato)
     {
         return ERROR;
     }
-    memcpy(dato, (*pila)->dato, MIN(tamDato, (*pila)->tamDato));
+    memcpy(dato, (*pila)->dato, MIN(tamDato, (*pila)->tam));
     temp = *pila;
     *pila = (*pila)->sig;
     free(temp->dato);
@@ -68,7 +68,7 @@ int verTope(const tpila *pila, void *dato, unsigned tamDato)
     if (!*pila)
         return ERROR;
 
-    memcpy(dato, (*pila)->dato, MIN(tamDato, (*pila)->tamDato));
+    memcpy(dato, (*pila)->dato, MIN(tamDato, (*pila)->tam));
 
     return TODO_OK;
 }

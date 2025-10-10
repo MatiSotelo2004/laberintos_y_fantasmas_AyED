@@ -8,7 +8,7 @@
 
 typedef struct
 {
-    unsigned vidas;
+    int vidas;
     char *vMovimientos;
     unsigned cantMovimientos;
     tCoordenadas posicionActual;
@@ -28,5 +28,6 @@ void jugadorMover(tJugador *j, const tCoordenadas *dst);
 void jugadorSumarPuntaje(tJugador *j);
 void jugadorSumarVida(tJugador *j);
 void jugadorRestarVida(tJugador *j);
+int jugadorCantVidas(const tJugador *j);
 
 #endif // JUGADOR_H_INCLUDED

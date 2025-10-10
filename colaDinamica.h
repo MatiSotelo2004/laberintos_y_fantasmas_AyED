@@ -4,24 +4,16 @@
 #include "stdio.h"
 #include "string.h"
 #include "ctype.h"
-#define MIN(a,b) (((a)<(b))?(a):(b))
 #define COLA_LLENA 1
 #define COLA_VACIA 2
 #define TODO_OK 0
 #define SIN_MEMORIA 1
-
-typedef struct sNodo{
-    void* dato;
-    unsigned tam;
-    struct sNodo* sig;
-}tNodo;
+#include "nodo.h"
 
 typedef struct{
     tNodo* pri;
     tNodo* ult;
 }tCola;
-
-
 
 void crearCola(tCola* cola);
 int ponerCola(tCola* cola,const void* dato,unsigned tam);

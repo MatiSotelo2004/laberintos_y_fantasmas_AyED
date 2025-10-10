@@ -3,6 +3,7 @@
 #include "coordenadas.h"
 #include "configuracionTablero.h"
 #include "macros.h"
+#include "tablero.h"
 
 typedef struct
 {
@@ -19,7 +20,7 @@ tCoordenadas posicionAleatoriaObtener(const tCoordenadas *limite);
 tCoordenadas* objetoParedesObtenerPunteroCoordenadas(const tPosObjeto *objeto);
 tCoordenadas* objetoPremioObtenerPunteroCoordenadas(const tPosObjeto *objeto);
 tCoordenadas* objetoVidasObtenerPunteroCoordenadas(const tPosObjeto *objeto);
-tCoordenadas* objetoFantasmasObtenerPunteroCoordenadas(const tPosObjeto *objeto);
+tCoordenadas* objetoFantasmasObtenerPunteroCoordenadas(const tPosObjeto *objeto, unsigned pos);
 tCoordenadas objetoFantasmasObtenerCoordenadas(const tPosObjeto *objeto, unsigned pos);
 
 #endif // OBJETOS_H_INCLUDED

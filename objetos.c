@@ -95,12 +95,12 @@ tCoordenadas* objetoVidasObtenerPunteroCoordenadas(const tPosObjeto *objeto)
     return objeto->vidas;
 }
 
-tCoordenadas* objetoFantasmasObtenerPunteroCoordenadas(const tPosObjeto *objeto)
+tCoordenadas* objetoFantasmasObtenerPunteroCoordenadas(const tPosObjeto *objeto,unsigned pos)
 {
-    return objeto->fantasma;
+    return (objeto->fantasma)+pos;
 }
 
 tCoordenadas objetoFantasmasObtenerCoordenadas(const tPosObjeto *objeto, unsigned pos)
 {
-    return *(objeto+pos)->fantasma;
+    return *((objeto->fantasma)+pos);
 }

@@ -38,3 +38,4 @@
 #define FIN_JUEGO 1
 #define TODO_OK 0
 #define CANTCAM 20
+#define COORDENADA_NO_DISPONIBLE -2
