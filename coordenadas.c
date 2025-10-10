@@ -25,6 +25,25 @@ void coordenadasRestarY(tCoordenadas *coords)
     coords->y--;
 }
 
+void coordenadasMover(tCoordenadas *coords, tDireccion dir)
+{
+    switch(dir)
+    {
+        case IZQUIERDA:
+            coords->x--;
+            break;
+        case DERECHA:
+            coords->x++;
+            break;
+        case ARRIBA:
+            coords->y--;
+            break;
+        case ABAJO:
+            coords->y++;
+            break;
+    }
+}
+
 void coordenadasCopiar(const tCoordenadas *orig, tCoordenadas *dst)
 {
     dst->x = orig->x;
@@ -58,7 +77,7 @@ void coordenadasMovimientoRecomendado(const tCoordenadas *puntoA, const tCoorden
     double distanciaEnXIzquierda = DISTANCIA(dst->x-1,puntoB->x,puntoA->y,puntoB->y);
     double distanciaEnYArriba = DISTANCIA(dst->x,puntoB->x,puntoA->y+1,puntoB->y);
     double distanciaEnYAbajo = DISTANCIA(dst->x,puntoB->x,puntoA->y-1,puntoB->y);
-    
+
     dst->y = puntoA->y;
     if(distanciaEnXDerecha < distanciaEnXIzquierda)
     {

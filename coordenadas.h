@@ -11,11 +11,15 @@ typedef struct
     unsigned y;
 }tCoordenadas;
 
+typedef enum { IZQUIERDA, DERECHA, ARRIBA, ABAJO } tDireccion;
+
 unsigned obtenerDistancia(const tCoordenadas *c1 , const tCoordenadas *c2);
 void coordenadasRestarX(tCoordenadas *coords);
 void coordenadasSumarX(tCoordenadas *coords);
 void coordenadasSumarY(tCoordenadas *coords);
 void coordenadasRestarY(tCoordenadas *coords);
+void coordenadasMover(tCoordenadas *coords, tDireccion dir);
+
 void coordenadasCopiar(const tCoordenadas *orig, tCoordenadas *dst);
 int coordenadasSonIguales(const tCoordenadas *c1, const tCoordenadas *c2);
 void coordenadaEjecutarMovimiento(tCoordenadas *cord, char movimiento);

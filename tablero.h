@@ -45,6 +45,12 @@ void caminosRandom(tTablero* lab);
 tCoordenadas tableroEntrada(const tTablero *tablero);
 tCoordenadas tableroSalida(const tTablero *tablero);
 //////////////////////////////////////////////////////////////////
-///
+///Nuevas funciones
+void colocarEntradaSalida(tTablero* lab);
+void generarCaminosPrincipales(tTablero* lab);
+void generarCaminosRandom(tTablero* lab, int cantidadCaminos);
+void limpiarEntradaSalida(tTablero* lab);
+int obtenerNumeroAleatorio(int minimo, int maximo);
+int posicionDisponible(const tTablero* lab, int x, int y);
 
 #endif // TABLERO_H_INCLUDED
