@@ -2,112 +2,213 @@
 #include "coordenadas.h"
 #include <stdlib.h>
 
+
+//int tableroCrear(tTablero *tablero, const tConfigTablero *config)
+//{
+//    char **i;
+//    char **j;
+//    char **fin;
+//    int tamX = config->tamTablero.x;
+//    int tamY = config->tamTablero.y;
+//
+//    // Forzar dimensiones impares
+//    if(tamX % 2 == 0) tamX++;
+//    if(tamY % 2 == 0) tamY++;
+//
+//    // Validar tamaño minimo
+//    if(tamX < 5) tamX = 5;
+//    if(tamY < 5) tamY = 5;
+//
+//    tablero->tablero = (char**)malloc(tamX * sizeof(char*));
+//    if(!tablero->tablero)
+//        return TABLERO_SIN_MEM;
+//
+//    fin = tablero->tablero + tamX;
+//    for(i = tablero->tablero; i < fin; i++)
+//    {
+//        *i = (char*)malloc(tamY * sizeof(char));
+//        if(!*i)
+//        {
+//            for(j = i - 1; j >= tablero->tablero; j--)
+//                free(*j);
+//
+//            free(tablero->tablero);
+//            return TABLERO_SIN_MEM;
+//        }
+//    }
+//    tablero->limite.x = tamX;
+//    tablero->limite.y = tamY;
+//
+//    return TODO_OK;
+//}
+
 int tableroCrear(tTablero *tablero, const tConfigTablero *config)
 {
-    char **i;
-    char **j;
-    char **fin;
-    int tamX = config->tamTablero.x;
-    int tamY = config->tamTablero.y;
-
-    // Forzar dimensiones impares
-    if(tamX % 2 == 0) tamX++;
-    if(tamY % 2 == 0) tamY++;
-
-    // Validar tamaño minimo
-    if(tamX < 5) tamX = 5;
-    if(tamY < 5) tamY = 5;
-
-    tablero->tablero = (char**)malloc(tamX * sizeof(char*));
+    int columnas = config->tamTablero.x;
+    int filas = config->tamTablero.y;
+    if(columnas < VALOR_MINIMO)
+        columnas = VALOR_MINIMO;
+    if(filas < VALOR_MINIMO)
+        filas = VALOR_MINIMO;
+    tablero->tablero=malloc(filas * sizeof(char*));
     if(!tablero->tablero)
         return TABLERO_SIN_MEM;
-
-    fin = tablero->tablero + tamX;
-    for(i = tablero->tablero; i < fin; i++)
+    for(int fil=0;fil<filas;fil++)
     {
-        *i = (char*)malloc(tamY * sizeof(char));
-        if(!*i)
+        tablero->tablero[fil]=malloc(columnas * sizeof(char));
+        if (!tablero->tablero[fil])
         {
-            for(j = i - 1; j >= tablero->tablero; j--)
-                free(*j);
-
+            for (int elim=0;elim<fil;elim++)
+                free(tablero->tablero[elim]);
             free(tablero->tablero);
             return TABLERO_SIN_MEM;
         }
     }
-    tablero->limite.x = tamX;
-    tablero->limite.y = tamY;
-
+    tablero->limite.x=columnas;
+    tablero->limite.y=filas;
     return TODO_OK;
 }
 
+
+//void tableroDestruir(tTablero *tablero)
+//{
+//    char **i;
+//    char **fin = tablero->tablero + tablero->limite.x;
+//    for(i = tablero->tablero; i < fin; i++)
+//        free(*i);
+//
+//    free(tablero->tablero);
+//}
+
 void tableroDestruir(tTablero *tablero)
 {
-    char **i;
-    char **fin = tablero->tablero + tablero->limite.x;
-    for(i = tablero->tablero; i < fin; i++)
-        free(*i);
-
+    int filas=tablero->limite.y;
+    for(int fil=0;fil<filas;fil++)
+        free(tablero->tablero[fil]);
     free(tablero->tablero);
+    tablero->tablero=NULL;
 }
+
+
+//void tableroDibujarParedes(tTablero *tablero)
+//{
+//    int i;
+//    for(i = 0; i < tablero->limite.x ; i++)
+//    {
+//        tablero->tablero[i][0] = CARACTER_PARED;
+//        tablero->tablero[i][tablero->limite.y-1] = CARACTER_PARED;
+//    }
+//
+//    for(i = 0; i < tablero->limite.y ; i++)
+//    {
+//        tablero->tablero[0][i] = CARACTER_PARED;
+//        tablero->tablero[tablero->limite.x-1][i] = CARACTER_PARED;
+//    }
+//}
 
 void tableroDibujarParedes(tTablero *tablero)
 {
-    int i;
-    for(i = 0; i < tablero->limite.x ; i++)
+    int filas = tablero->limite.y;
+    int columnas = tablero->limite.x;
+    for(int col=0;col<columnas;col++)
     {
-        tablero->tablero[i][0] = CARACTER_PARED;
-        tablero->tablero[i][tablero->limite.y-1] = CARACTER_PARED;
+        tablero->tablero[0][col] = CARACTER_PARED;
+        tablero->tablero[filas - 1][col] = CARACTER_PARED;
     }
-
-    for(i = 0; i < tablero->limite.y ; i++)
+    for(int fil=0;fil<filas;fil++)
     {
-        tablero->tablero[0][i] = CARACTER_PARED;
-        tablero->tablero[tablero->limite.x-1][i] = CARACTER_PARED;
+        tablero->tablero[fil][0] = CARACTER_PARED;
+        tablero->tablero[fil][columnas - 1] = CARACTER_PARED;
     }
 }
 
+//void tableroInicializar(tTablero *tablero, char caracter)
+//{
+//    int i,j;
+//    for(i = 1; i < tablero->limite.x - 1; i++)
+//    {
+//        for(j = 1 ; j < tablero->limite.y - 1; j++)
+//            tablero->tablero[i][j] = caracter;
+//    }
+//}
 void tableroInicializar(tTablero *tablero, char caracter)
 {
-    int i,j;
-    for(i = 1; i < tablero->limite.x - 1; i++)
+    for(int fil=1;fil<tablero->limite.y-1;fil++)
     {
-        for(j = 1 ; j < tablero->limite.y - 1; j++)
-            tablero->tablero[i][j] = caracter;
+        for(int col=1;col<tablero->limite.x-1;col++)
+        {
+            tablero->tablero[fil][col] = caracter;
+        }
     }
 }
+
+
+//void tableroImprimir(const tTablero *tablero, FILE* fp, Accion mostrar)
+//{
+//    int i,j;
+//    for(i = 0; i < tablero->limite.x; i++)
+//    {
+//        for(j = 0; j < tablero->limite.y; j++)
+//            mostrar(fp,&tablero->tablero[i][j]);
+//
+//        fprintf(fp,"\n");
+//    }
+//}
 
 void tableroImprimir(const tTablero *tablero, FILE* fp, Accion mostrar)
 {
-    int i,j;
-    for(i = 0; i < tablero->limite.x; i++)
+    for(int fil=0;fil<tablero->limite.y;fil++)
     {
-        for(j = 0; j < tablero->limite.y; j++)
-            mostrar(fp,&tablero->tablero[i][j]);
-
-        fprintf(fp,"\n");
-    }
-}
-
-void tableroColocarObjetosAleatorio(tTablero *tablero, tCoordenadas *coords, unsigned cantObj, char caracter)
-{
-    int i;
-    tCoordenadas coordsAleatorias;
-    for(i = 0; i < cantObj; i++)
-    {
-        OBTENER_NUM_ALEATORIO(1,tablero->limite.y-1, coordsAleatorias.y);
-        OBTENER_NUM_ALEATORIO(1,tablero->limite.x-1, coordsAleatorias.x);
-        while(!POSICION_ESTA_DISPONIBLE(tablero->tablero,coordsAleatorias.x,coordsAleatorias.y))
+        for(int col=0;col<tablero->limite.x;col++)
         {
-            OBTENER_NUM_ALEATORIO(1,tablero->limite.y-1, coordsAleatorias.y);
-            OBTENER_NUM_ALEATORIO(1,tablero->limite.x-1, coordsAleatorias.x);
+            mostrar(fp,&tablero->tablero[fil][col]);
         }
-
-        tablero->tablero[coordsAleatorias.x][coordsAleatorias.y] = caracter;
-        (coords + i)->x = coordsAleatorias.x;
-        (coords + i)->y = coordsAleatorias.y;
+        fprintf(fp, "\n");
     }
 }
+
+//void tableroColocarObjetosAleatorio(tTablero *tablero, tCoordenadas *coords, unsigned cantObj, char caracter)
+//{
+//    int i;
+//    tCoordenadas coordsAleatorias;
+//    for(i = 0; i < cantObj; i++)
+//    {
+//        OBTENER_NUM_ALEATORIO(1,tablero->limite.y-1, coordsAleatorias.y);
+//        OBTENER_NUM_ALEATORIO(1,tablero->limite.x-1, coordsAleatorias.x);
+//        while(!POSICION_ESTA_DISPONIBLE(tablero->tablero,coordsAleatorias.x,coordsAleatorias.y))
+//        {
+//            OBTENER_NUM_ALEATORIO(1,tablero->limite.y-1, coordsAleatorias.y);
+//            OBTENER_NUM_ALEATORIO(1,tablero->limite.x-1, coordsAleatorias.x);
+//        }
+//
+//        tablero->tablero[coordsAleatorias.x][coordsAleatorias.y] = caracter;
+//        (coords + i)->x = coordsAleatorias.x;
+//        (coords + i)->y = coordsAleatorias.y;
+//    }
+//}
+void tableroColocarObjetosAleatorio(tTablero *tablero, tCoordenadas *coordenadas, unsigned cantidadObjetos, char caracter)
+{
+    tCoordenadas pos;
+    for(int cant=0;cant<cantidadObjetos;cant++)
+    {
+        do
+        {
+            pos.y=obtenerNumeroAleatorio(1,tablero->limite.y-2);
+            pos.x=obtenerNumeroAleatorio(1,tablero->limite.x-2);
+        }
+        while(!tableroPosicionEstaDisponibleV2(tablero->tablero,pos));
+
+        tablero->tablero[pos.x][pos.y] = caracter;
+
+    }
+}
+
+
+int tableroPosicionEstaDisponibleV2(const char **tablero,const tCoordenadas *coords)
+{
+    return tablero[coords->x][coords->y] == LUGAR_VACIO;
+}
+
 
 int tableroPosicionEstaDisponible(const tTablero *tablero, const tCoordenadas *coords)
 {
@@ -115,6 +216,9 @@ int tableroPosicionEstaDisponible(const tTablero *tablero, const tCoordenadas *c
         return 1;
     return 0;
 }
+
+
+
 
 void tableroVerObjeto(const tTablero *tablero, const tCoordenadas *coords, char *dest)
 {
@@ -156,6 +260,10 @@ void cantidadVecinos(tTablero* lab)
     }
     lab->vecinos.cantidad = cant;
 }
+
+
+
+
 
 void generarLab(tTablero* lab)
 {
@@ -308,3 +416,11 @@ tCoordenadas tableroSalida(const tTablero *tablero)
 {
     return tablero->salida;
 }
+
+
+
+int obtenerNumeroAleatorio(int mini, int maxi)
+{
+    return rand() % (maxi - mini + 1) + mini;
+}
+

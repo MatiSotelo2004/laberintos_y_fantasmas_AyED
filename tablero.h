@@ -8,6 +8,10 @@
 #include "coordenadas.h"
 #include "configuracionTablero.h"
 #include "pilad.h"
+#define VALOR_MINIMO 5
+#define MAX_VECINOS 4
+#define OBTENER_NUM_ALEATORIO(MIN,MAX,DST) \
+    ((DST) = (rand() % ((MAX) - (MIN))) + (MIN))
 
 
 typedef void (*Accion)(void *elem, void *extra);
@@ -15,7 +19,7 @@ typedef void (*Accion)(void *elem, void *extra);
 typedef struct
 {
     unsigned cantidad;
-    tCoordenadas vecino[4];
+    tCoordenadas vecino[MAX_VECINOS];
 }tVecinos;
 
 typedef struct
@@ -28,6 +32,10 @@ typedef struct
     tVecinos vecinos;
 }tTablero;
 
+
+
+int obtenerNumeroAleatorio(int mini, int maxi);
+int posicionEstaDisponible(char **tablero, int fila, int columna);
 //////////////////////////////////////////////////////////////////
 ///
 int tableroCrear(tTablero *tablero, const tConfigTablero *config);
@@ -39,6 +47,11 @@ int tableroPosicionEstaDisponible(const tTablero *tablero, const tCoordenadas *c
 void tableroColocarObjetosAleatorio(tTablero *tablero, tCoordenadas *coords, unsigned cantObj, char caracter);
 void tableroVerObjeto(const tTablero *tablero, const tCoordenadas *coords, char *dest);
 int tableroColocarObjeto(tTablero *tablero, const tCoordenadas *obj, char caracter);
+
+
+
+
+
 void cantidadVecinos(tTablero* lab);
 void generarLab(tTablero* lab);
 void caminosRandom(tTablero* lab);

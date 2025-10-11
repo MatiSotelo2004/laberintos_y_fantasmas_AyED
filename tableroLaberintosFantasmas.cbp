@@ -43,6 +43,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="jugador.h" />
+		<Unit filename="laberinto.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="laberinto.h" />
 		<Unit filename="macros.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
