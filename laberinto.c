@@ -54,23 +54,25 @@ void generarCaminoPrincipalLab(tTablero* laberinto, tpila* historial)
 {
     tCoordenadas meta={laberinto->entrada.x,PRIMER_INTERIOR_FILA};
     int cont=0;
-    while (!pilaVacia(historial) || laberinto->tablero[meta.y][meta.x]==CARACTER_PARED)
-    {
+    while(laberinto->tablero[meta.y][meta.x]==CARACTER_PARED){
         calcularVecinosDisponiblesLab(laberinto);
         if (laberinto->vecinos.cantidad > 0)
         {
             apilarPila(historial, &laberinto->actual, sizeof(tCoordenadas));
             trazarCaminoHaciaVecinoLab(laberinto);
+            tableroImprimir(laberinto,stdout,mostrarCharEnPantalla);
+            puts("");
         }
         else
         {
+            puts("");
+            puts("Volviendo para atras");
+            puts("");
             desapilarPila(historial, &laberinto->actual, sizeof(tCoordenadas));
         }
-        tableroImprimir(laberinto,stdout,mostrarCharEnPantalla);
-        puts("");
         cont++;
     }
-        printf("Cantidad de iteraciones:%d\n",cont);
+    printf("Cantidad de iteraciones:%d\n",cont);
 }
 
 void trazarCaminoHaciaVecinoLab(tTablero* laberinto){
@@ -79,8 +81,8 @@ void trazarCaminoHaciaVecinoLab(tTablero* laberinto){
     int eleccion = obtenerNumeroAleatorio(0, laberinto->vecinos.cantidad - 1);
     laberinto->actual = laberinto->vecinos.vecino[eleccion];
     intermedio = calcularCeldaIntermediaLab(&anterior,&laberinto->actual);
-    laberinto->tablero[intermedio.x][intermedio.y] = LUGAR_VACIO;
-    laberinto->tablero[laberinto->actual.x][laberinto->actual.y] = LUGAR_VACIO;
+    laberinto->tablero[intermedio.y][intermedio.x] = LUGAR_VACIO;
+    laberinto->tablero[laberinto->actual.y][laberinto->actual.x] = LUGAR_VACIO;
 }
 
 tCoordenadas calcularCeldaIntermediaLab(const tCoordenadas* origen, const tCoordenadas* destino)
@@ -105,8 +107,8 @@ void calcularVecinosDisponiblesLab(tTablero* laberinto)
         printf("FilaV:%d\nColuV:%d\n",filaVecina,columnaVecina);
         if (esVecinoValidoLab(laberinto, filaVecina, columnaVecina))
         {
-            laberinto->vecinos.vecino[cantidadVecinos].x = filaVecina;
-            laberinto->vecinos.vecino[cantidadVecinos].y = columnaVecina;
+            laberinto->vecinos.vecino[cantidadVecinos].x = columnaVecina;
+            laberinto->vecinos.vecino[cantidadVecinos].y = filaVecina;
             cantidadVecinos++;
             puts("Vecino valido");
         }
@@ -120,10 +122,10 @@ void calcularVecinosDisponiblesLab(tTablero* laberinto)
 }
 
 int esVecinoValidoLab(const tTablero* laberinto, int fila, int columna){
-    if(fila < BORDE_SUPERIOR || fila > BORDE_INFERIOR(laberinto->limite.y)){
+    if(fila <= BORDE_SUPERIOR || fila >= BORDE_INFERIOR(laberinto->limite.y)){
         return NO_VALIDO;
     }
-    if(columna < BORDE_IZQUIERDO || columna > BORDE_DERECHO(laberinto->limite.x)){
+    if(columna <= BORDE_IZQUIERDO || columna >= BORDE_DERECHO(laberinto->limite.x)){
         return NO_VALIDO;
     }
     if(laberinto->tablero[fila][columna] != CARACTER_PARED){

@@ -157,9 +157,9 @@ void tableroInicializar(tTablero *tablero, char caracter)
 
 void tableroImprimir(const tTablero *tablero, FILE* fp, Accion mostrar)
 {
-    putc('#',fp);
-    putc('#',fp);
-    putc('#',fp);
+    putc(' ',fp);
+    putc(' ',fp);
+    putc(' ',fp);
     for(int col=0;col<tablero->limite.x;col++)
         {
             printf("%d",col%10);
