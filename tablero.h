@@ -8,7 +8,7 @@
 #include "coordenadas.h"
 #include "configuracionTablero.h"
 #include "pilad.h"
-#define VALOR_MINIMO 5
+#define VALOR_MINIMO 11
 #define MAX_VECINOS 4
 #define OBTENER_NUM_ALEATORIO(MIN,MAX,DST) \
     ((DST) = (rand() % ((MAX) - (MIN))) + (MIN))

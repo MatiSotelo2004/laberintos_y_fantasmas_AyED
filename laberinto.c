@@ -54,7 +54,8 @@ void generarCaminoPrincipalLab(tTablero* laberinto, tpila* historial)
 {
     tCoordenadas meta={laberinto->entrada.x,PRIMER_INTERIOR_FILA};
     int cont=0;
-    while(laberinto->tablero[meta.y][meta.x]==CARACTER_PARED){
+    int limite = 100;
+    while(cont!=limite &&laberinto->tablero[meta.y][meta.x]==CARACTER_PARED){
         calcularVecinosDisponiblesLab(laberinto);
         if (laberinto->vecinos.cantidad > 0)
         {
@@ -82,7 +83,11 @@ void trazarCaminoHaciaVecinoLab(tTablero* laberinto){
     laberinto->actual = laberinto->vecinos.vecino[eleccion];
     intermedio = calcularCeldaIntermediaLab(&anterior,&laberinto->actual);
     laberinto->tablero[intermedio.y][intermedio.x] = LUGAR_VACIO;
-    laberinto->tablero[laberinto->actual.y][laberinto->actual.x] = LUGAR_VACIO;
+    if(laberinto->actual.y != BORDE_SUPERIOR && laberinto->actual.x != BORDE_IZQUIERDO && laberinto->actual.x != BORDE_DERECHO(laberinto->limite.x)){
+        laberinto->tablero[laberinto->actual.y][laberinto->actual.x] = LUGAR_VACIO;
+    }else{
+        laberinto->actual = intermedio;
+    }
 }
 
 tCoordenadas calcularCeldaIntermediaLab(const tCoordenadas* origen, const tCoordenadas* destino)
@@ -122,14 +127,23 @@ void calcularVecinosDisponiblesLab(tTablero* laberinto)
 }
 
 int esVecinoValidoLab(const tTablero* laberinto, int fila, int columna){
-    if(fila <= BORDE_SUPERIOR || fila >= BORDE_INFERIOR(laberinto->limite.y)){
+    if(fila < BORDE_SUPERIOR || fila >= BORDE_INFERIOR(laberinto->limite.y)){
         return NO_VALIDO;
     }
-    if(columna <= BORDE_IZQUIERDO || columna >= BORDE_DERECHO(laberinto->limite.x)){
-        return NO_VALIDO;
-    }
-    if(laberinto->tablero[fila][columna] != CARACTER_PARED){
-        return NO_VALIDO;
+    if(fila > PRIMER_INTERIOR_FILA){
+        if(columna <= BORDE_IZQUIERDO || columna >= BORDE_DERECHO(laberinto->limite.x)){
+            return NO_VALIDO;
+        }
+        if(laberinto->tablero[fila][columna] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+    }else{
+        if(fila == PRIMER_INTERIOR_FILA && laberinto->tablero[fila][columna] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(columna < BORDE_IZQUIERDO || columna > BORDE_DERECHO(laberinto->limite.x)){
+            return NO_VALIDO;
+        }
     }
     return SI_VALIDO;
 }
