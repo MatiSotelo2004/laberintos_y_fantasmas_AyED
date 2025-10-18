@@ -50,12 +50,12 @@ int tableroCrear(tTablero *tablero, const tConfigTablero *config)
         columnas = VALOR_MINIMO;
     if(filas < VALOR_MINIMO)
         filas = VALOR_MINIMO;
-    tablero->tablero=malloc(filas * sizeof(char*));
+    tablero->tablero=(char**)malloc(filas * sizeof(char*));
     if(!tablero->tablero)
         return TABLERO_SIN_MEM;
     for(int fil=0;fil<filas;fil++)
     {
-        tablero->tablero[fil]=malloc(columnas * sizeof(char));
+        tablero->tablero[fil]=(char*)malloc(columnas * sizeof(char));
         if (!tablero->tablero[fil])
         {
             for (int elim=0;elim<fil;elim++)
@@ -157,8 +157,17 @@ void tableroInicializar(tTablero *tablero, char caracter)
 
 void tableroImprimir(const tTablero *tablero, FILE* fp, Accion mostrar)
 {
+    putc('#',fp);
+    putc('#',fp);
+    putc('#',fp);
+    for(int col=0;col<tablero->limite.x;col++)
+        {
+            printf("%d",col%10);
+        }
+        puts("");
     for(int fil=0;fil<tablero->limite.y;fil++)
     {
+        printf("%2d|",fil);
         for(int col=0;col<tablero->limite.x;col++)
         {
             mostrar(fp,&tablero->tablero[fil][col]);
@@ -196,7 +205,7 @@ void tableroColocarObjetosAleatorio(tTablero *tablero, tCoordenadas *coordenadas
             pos.y=obtenerNumeroAleatorio(1,tablero->limite.y-2);
             pos.x=obtenerNumeroAleatorio(1,tablero->limite.x-2);
         }
-        while(!tableroPosicionEstaDisponibleV2(tablero->tablero,pos));
+        while(!tableroPosicionEstaDisponibleV2((const char**)tablero->tablero,&pos));
 
         tablero->tablero[pos.x][pos.y] = caracter;
 

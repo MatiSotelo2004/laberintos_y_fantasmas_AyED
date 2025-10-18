@@ -2,6 +2,7 @@
 #include "objetos.h"
 #include "menu.h"
 #include "jugador.h"
+#include "laberinto.h"
 
 void mostrarCharEnPantalla(void *fp, void *elem);
 
@@ -30,9 +31,15 @@ int main()
 
     configuracionTableroCargar(&config,"configs.txt");
     tableroCrear(&tablero,&config);
+    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
+    puts("Hasta aca se creo");
     tableroInicializar(&tablero, CARACTER_PARED);
+    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
+    puts("Hasta aca se inicializo");
     tableroDibujarParedes(&tablero);
-    generarLab(&tablero);
+    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
+    puts("Hasta aca se agrego las paredes");
+    generarLaberinto(&tablero);
     tCoordenadas coordenadaEntrada = tableroEntrada(&tablero);
     tCoordenadas coordenadaSalida =  tableroSalida(&tablero);
     tCoordenadas coordenadaFantasmaAux;
@@ -102,7 +109,7 @@ int main()
 
             tableroColocarObjeto(&tablero,&jugadorCoordsAux,CARACTER_JUGADOR);
             jugadorMover(&jugador,&jugadorCoordsAux);
-
+            system("cls");
             tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
             puts("\n\n\n\n");
         }else
@@ -115,7 +122,7 @@ int main()
     return 0;
 }
 
-void mostrarCharEnPantalla(void *fp, void *elem)
-{
-    fprintf((FILE*)fp,"%c",(*(char*)elem));
-}
+//void mostrarCharEnPantalla(void *fp, void *elem)
+//{
+//    fprintf((FILE*)fp,"%c",(*(char*)elem));
+//}

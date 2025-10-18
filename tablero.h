@@ -66,4 +66,8 @@ void limpiarEntradaSalida(tTablero* lab);
 int obtenerNumeroAleatorio(int minimo, int maximo);
 int posicionDisponible(const tTablero* lab, int x, int y);
 
+//
+int tableroPosicionEstaDisponibleV2(const char** tablero,const tCoordenadas *coords);
+
+
 #endif // TABLERO_H_INCLUDED
