@@ -3,6 +3,8 @@
 #include "tablero.h"
 #include <stdlib.h>
 #include <stdio.h>
+#define NO_VALIDO 0
+#define SI_VALIDO 1
 #define SALTO_CELDA 2
 #define MAX_DESPLAZAMIENTOS 4
 #define MAX_ALEATORIOS 40
