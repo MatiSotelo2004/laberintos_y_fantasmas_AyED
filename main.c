@@ -1,4 +1,3 @@
-#include "menu.h"
 #include "Comun.h"
 
 void mostrarCharEnPantalla(void *fp, void *elem);
@@ -6,15 +5,6 @@ void mostrarCharEnPantalla(void *fp, void *elem);
 int main()
 {
 
-    /*
-     *
-     * PREGUNTAS
-     1. La entrada puede ser de los laterales, o sólo del techo --> CRITERIO NUESTRO
-     2. Preguntar por division de archivos .h y .c --> ESTA BIEN QUE ESTE TODO DIVIDIDO
-     3. Cómo parsear el archivo de configs.txt (en qué forma vienen los datos) --> DIJO QUE A CRITERIO NUESTRO
-     4. Es necesario validar los datos del archivo configs.txt // por ejemplo, el minimo tamaño de la matriz
-     5. Que pasa si un fantsama pasa por encima de un objeto? (VIDAEXTRA, PREMIO)? --> NO PUEDE PASAR POR ENCIMA DE UN OBJETO
-     */
     srand(time(NULL));
     tConfigTablero config;
     tTablero tablero;
@@ -24,12 +14,13 @@ int main()
     char objetoEnPosicionSeleccionada;
     int i;
     tCola colaMovimientos;
-
+    char nombre[MAX_TAM_NOMBRE_JUGADOR];
     crearCola(&colaMovimientos);
 
-    //if(mostrarMenu()==FIN_JUEGO)
-        //return 0;
+    if(mostrarMenu()==FIN_JUEGO)
+        return 0;
 
+    pedirString(MENSAJE_PEDIR_NOMBRE,nombre,MAX_TAM_NOMBRE_JUGADOR);
     configuracionTableroCargar(&config,"configs.txt");
     tableroCrear(&tablero,&config);
     tableroInicializar(&tablero, CARACTER_PARED);
@@ -44,20 +35,21 @@ int main()
     unsigned cantVidasExtra = configuracionTableroObtenerCantidadVidasExtra(&config);
     unsigned cantFantasmas = configuracionTableroObtenerCantidadFantasmas(&config);
     objetosCrear(&objetos,&config,&coordenadaEntrada);
-    jugadorCrear(&jugador);
 
     tableroColocarObjetosAleatorio(&tablero, objetoPremioObtenerPunteroCoordenadas(&objetos), cantPremios, CARACTER_PREMIO);
     tableroColocarObjetosAleatorio(&tablero, objetoVidasObtenerPunteroCoordenadas(&objetos), cantVidasExtra, CARACTER_VIDA);
     tableroColocarObjetosAleatorio(&tablero, objetoFantasmasObtenerPunteroCoordenadas(&objetos,0), cantFantasmas, CARACTER_FANTASMA);
 
-    jugadorInicializar(&jugador,&coordenadaEntrada,cantVidasInicial);
+
+    jugadorInicializar(&jugador,&coordenadaEntrada,cantVidasInicial,nombre);
     tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
 
-    tCoordenadas jugadorCoordsAux = jugadorCoordenadas(&jugador);
+    tCoordenadas jugadorCoordsAux;
     tableroColocarObjeto(&tablero,&coordenadaEntrada,CARACTER_ENTRADA);
 
     while(!coordenadasSonIguales(&coordenadaSalida,jugadorCoordenadasPuntero(&jugador)) && jugadorCantVidas(&jugador) > 0 && movimiento != '?')
     {
+        jugadorCoordsAux = jugadorCoordenadas(&jugador);
         //la condicion de fin con el movimiento y el signo de pregunta es para que cuando hagamos pruebas "terminemos" el juego sin tener que llegar a la meta
         do
         {
@@ -68,10 +60,12 @@ int main()
         coordenadaEjecutarMovimiento(&jugadorCoordsAux,movimiento);
         tableroVerObjeto(&tablero,&jugadorCoordsAux,&objetoEnPosicionSeleccionada);
 
-        if(objetoEnPosicionSeleccionada != CARACTER_PARED) //&& objetoEnPosicionSeleccionada != CARACTER_INVALIDO)
+        if(objetoEnPosicionSeleccionada != CARACTER_PARED)
         {
+            ponerCola(&colaMovimientos,&jugadorCoordsAux,sizeof(tCoordenadas));
+
             if(objetoEnPosicionSeleccionada == CARACTER_PREMIO)
-                jugadorSumarPuntaje(&jugador);
+                jugadorSumarPuntaje(&jugador,CANT_PUNTAJE_POR_PREMIO_TABLERO);
             if(objetoEnPosicionSeleccionada == CARACTER_VIDA)
                 jugadorSumarVida(&jugador);
 
@@ -80,43 +74,26 @@ int main()
             else
                 tableroColocarObjeto(&tablero,jugadorCoordenadasPuntero(&jugador),LUGAR_VACIO);
 
-
-
-            for(i = 0; i < cantFantasmas && !coordenadasSonIguales(&jugadorCoordsAux,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i)); i++)
+            for(i = 0; i < cantFantasmas; i++)
             {
                 coordenadaFantasmaAux = objetoFantasmasObtenerCoordenadas(&objetos,i);
                 coordenadaFantasmaAux = fantasmaObtenerSiguienteMovimiento(&tablero,&coordenadaFantasmaAux,&jugadorCoordsAux);
-
-                tableroVerObjeto(&tablero,&coordenadaFantasmaAux,&objetoEnPosicionSeleccionada);
-                if(objetoEnPosicionSeleccionada != CARACTER_PARED
-                    && objetoEnPosicionSeleccionada != CARACTER_PREMIO
-                    && objetoEnPosicionSeleccionada != CARACTER_VIDA
-                    && objetoEnPosicionSeleccionada != CARACTER_FANTASMA)
-                {
-                    ponerCola(&colaMovimientos,&coordenadaFantasmaAux,sizeof(tCoordenadas));
-                    tableroColocarObjeto(&tablero,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i),LUGAR_VACIO);
-                    // tableroColocarObjeto(&tablero,&coordenadaFantasmaAux,CARACTER_FANTASMA);
-                    coordenadasCopiar(&coordenadaFantasmaAux,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i));
-                }
-
-                if(coordenadasSonIguales(&jugadorCoordsAux,objetoFantasmasObtenerPunteroCoordenadas(&objetos,i)))
-                {
-                    jugadorRestarVida(&jugador);
-                    coordenadasCopiar(&coordenadaEntrada,&jugadorCoordsAux);
-
-                }
+                ponerCola(&colaMovimientos,&coordenadaFantasmaAux,sizeof(tCoordenadas));
             }
 
-            ponerCola(&colaMovimientos,&jugadorCoordsAux,sizeof(tCoordenadas));
-            //tableroColocarObjeto(&tablero,&jugadorCoordsAux,CARACTER_JUGADOR);
-            actualizarMovimientosTableroDesdeCola(&colaMovimientos,&tablero, &jugador);
-
+            actualizarMovimientosTableroDesdeCola(&colaMovimientos,&tablero, &jugador,&objetos);
             tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
             puts("\n\n\n\n");
         }else
             coordenadasCopiar(jugadorCoordenadasPuntero(&jugador),&jugadorCoordsAux);
-
     }
+
+    if(coordenadasSonIguales(&coordenadaSalida,jugadorCoordenadasPuntero(&jugador)))
+        jugadorSumarPuntaje(&jugador, CANT_PUNTAJE_POR_GANAR);
+
+    void *aux = servidorInteractuar(sizeof(tHistorialJugador),1,LLAMADA_A_SERVIDOR_AGREGAR_JUGADOR,&jugador,seterHistorialJugador);
+    //la variable aux la uso porque esa funcion devuelve la respuesta que me dió el servidor, pero como no la necesito, la libero
+    free(aux);
 
     vaciarCola(&colaMovimientos);
     tableroDestruir(&tablero);

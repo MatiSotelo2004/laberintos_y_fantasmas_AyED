@@ -2,7 +2,7 @@
 #define TODO_OK 0
 #define TABLERO_SIN_MEM -1
 #define ARCHIVO_ERROR -1
-#define TAM_BUFFER 512
+#define TAM_BUFFER 1024
 #define PARAMETRO_FILA_UBICACION 0
 #define PARAMETRO_COLUMNA_UBICACION 1
 #define PARAMETRO_VIDAS_INICIO_UBICACION 2
@@ -30,12 +30,14 @@
 #define MOVIMIENTO_DERECHA 'd'
 #define JUGADOR_ES_GANADOR 1
 #define TITULO "BIENVENIDO A LABERINTOS Y FANTASMAS"
-#define OPCION_A 'A' ///Ver raking de jugadores
-#define OPCION_B 'B' ///Jugar nueva partida
-#define OPCION_C 'C' ///Salir del juego
+#define OPCION_VER_HISTORIAL 'A' ///Ver raking de jugadores
+#define OPCION_NUEVA_PARTIDA 'B' ///Jugar nueva partida
+#define OPCION_SALIR 'C' ///Salir del juego
+#define OPCION_NUEVO_JUGADOR 'D'
 #define OPCION_D 'D' ///A definir si hacemos mas opciones de MENU_H_INCLUDED
 #define miToUpper(x) (((x)>='a')?((x)-('a'-'A')):(x))
 #define FIN_JUEGO 1
 #define TODO_OK 0
 #define CANTCAM 20
 #define COORDENADA_NO_DISPONIBLE -2
+#define NOMBRE_ARCHIVO_HISTORIAL "jugadores.dat"

@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define TODO_OK 0
-#define ERROR 1
+#define ERROR_PILA 1
 #define TAM_PILA 1000
 
 #include "nodo.h"

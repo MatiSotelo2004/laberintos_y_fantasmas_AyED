@@ -12,11 +12,11 @@ int apilarPila(tpila *pila, const void *dato, unsigned tamDato)
     tNodo *datoTemp;
 
     if (!(datoTemp = (tNodo *)malloc(sizeof(tNodo))))
-        return ERROR;
+        return ERROR_PILA;
     if (!(datoTemp->dato = malloc(tamDato)))
     {
         free(datoTemp);
-        return ERROR;
+        return ERROR_PILA;
     }
 
     memcpy(datoTemp->dato, dato, tamDato);
@@ -31,7 +31,7 @@ int desapilarPila(tpila *pila, void *dato, unsigned tamDato)
     tNodo *temp;
     if (!*pila)
     {
-        return ERROR;
+        return ERROR_PILA;
     }
     memcpy(dato, (*pila)->dato, MIN(tamDato, (*pila)->tam));
     temp = *pila;
@@ -66,7 +66,7 @@ int pilaLlena(const tpila *pila, unsigned tamDato)
 int verTope(const tpila *pila, void *dato, unsigned tamDato)
 {
     if (!*pila)
-        return ERROR;
+        return ERROR_PILA;
 
     memcpy(dato, (*pila)->dato, MIN(tamDato, (*pila)->tam));
 

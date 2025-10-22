@@ -1,29 +1,13 @@
 #include "jugador.h"
 
-int jugadorCrear(tJugador *jugador)
-{
-
-    jugador->vMovimientos = (char*)malloc(CAP_INICIAL_VECTOR_MOVIMIENTOS * sizeof(tCoordenadas));
-    if(!jugador->vMovimientos)
-        return TABLERO_SIN_MEM;
-    jugador->capMaxMovimientos = CAP_INICIAL_VECTOR_MOVIMIENTOS;
-    return TODO_OK;
-
-}
-
-void jugadorInicializar(tJugador *jugador, const tCoordenadas *posInicial, unsigned cantVidasInicial)
+void jugadorInicializar(tJugador *jugador, const tCoordenadas *posInicial, unsigned cantVidasInicial, const char *nombre)
 {
     jugador->posicionActual.x = posInicial->x;
     jugador->posicionActual.y = posInicial->y;
     jugador->puntaje = 0;
     jugador->vidas = cantVidasInicial;
     jugador->cantMovimientos = 0;
-    jugador->capMaxMovimientos = CAP_INICIAL_VECTOR_MOVIMIENTOS;
-}
-
-void jugadorDestruir(tJugador *jugador)
-{
-    free(jugador->vMovimientos);
+    strcpy(jugador->nombre,nombre);
 }
 
 char jugadorPedirMovimiento()
@@ -61,9 +45,9 @@ void jugadorMover(tJugador *j, const tCoordenadas *dst)
     j->posicionActual.y = dst->y;
 }
 
-void jugadorSumarPuntaje(tJugador *j)
+void jugadorSumarPuntaje(tJugador *j, unsigned cantidad)
 {
-    j->puntaje++;
+    j->puntaje+=cantidad;
 }
 
 void jugadorSumarVida(tJugador *j)
@@ -79,4 +63,9 @@ void jugadorRestarVida(tJugador *j)
 int jugadorCantVidas(const tJugador *j)
 {
     return j->vidas;
+}
+
+int jugadorSumarCantidadDeMovimiento(tJugador *j)
+{
+    return (j->cantMovimientos+=1);
 }

@@ -2,7 +2,7 @@
 int mostrarMenu()
 {
     char opcion=1;
-    while(miToUpper(opcion)!=OPCION_C)
+    while(miToUpper(opcion)!=OPCION_SALIR)
     {
         printf("%s\n",TITULO);
         printOpciones();
@@ -10,19 +10,22 @@ int mostrarMenu()
         scanf("%c",&opcion);
         switch(miToUpper(opcion))
         {
-        case OPCION_A:
-            puts("La opcion de ver el ranking no esta implementada aun.");
-            break;
-        case OPCION_B:
-            opcion=OPCION_C;
-            break;
-        case OPCION_C:
-            puts("Gracias por jugar!!!");
-            puts("Saliendo...");
-            return FIN_JUEGO;
-            break;
-        default:
-            puts("Opcion incorrecta, por favor ingrese nuevamente.");
+            case OPCION_VER_HISTORIAL:
+                //verPartidas("jugadores.dat");
+                void *aux = servidorInteractuar(sizeof(NOMBRE_ARCHIVO_HISTORIAL),1,LLAMADA_A_SERVIDOR_VER_HISTORIAL,NULL,copiarNombreArchivo);
+                //la variable aux la uso porque esa funcion devuelve la respuesta que me dió el servidor, pero como no la necesito, la libero
+                free(aux);
+                break;
+            case OPCION_NUEVA_PARTIDA:
+                opcion=OPCION_SALIR;
+                break;
+            case OPCION_SALIR:
+                puts("Gracias por jugar!!!");
+                puts("Saliendo...");
+                return FIN_JUEGO;
+                break;
+            default:
+                puts("Opcion incorrecta, por favor ingrese nuevamente.");
             break;
         }
         system("pause");

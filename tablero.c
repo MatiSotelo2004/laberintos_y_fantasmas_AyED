@@ -7,25 +7,14 @@ int tableroCrear(tTablero *tablero, const tConfigTablero *config)
     char **i;
     char **j;
     char **fin;
-    int tamX = config->tamTablero.x;
-    int tamY = config->tamTablero.y;
-
-    // Forzar dimensiones impares
-    if(tamX % 2 == 0) tamX++;
-    if(tamY % 2 == 0) tamY++;
-
-    // Validar tama�o minimo
-    if(tamX < 5) tamX = 5;
-    if(tamY < 5) tamY = 5;
-
-    tablero->tablero = (char**)malloc(tamX * sizeof(char*));
+    tablero->tablero = (char**)malloc(config->tamTablero.x * sizeof(char*));
     if(!tablero->tablero)
         return TABLERO_SIN_MEM;
 
-    fin = tablero->tablero + tamX;
+    fin = tablero->tablero + config->tamTablero.x;
     for(i = tablero->tablero; i < fin; i++)
     {
-        *i = (char*)malloc(tamY * sizeof(char));
+        *i = (char*)malloc(config->tamTablero.y * sizeof(char));
         if(!*i)
         {
             for(j = i - 1; j >= tablero->tablero; j--)
@@ -35,8 +24,8 @@ int tableroCrear(tTablero *tablero, const tConfigTablero *config)
             return TABLERO_SIN_MEM;
         }
     }
-    tablero->limite.x = tamX;
-    tablero->limite.y = tamY;
+    tablero->limite.x = config->tamTablero.x;
+    tablero->limite.y = config->tamTablero.y;
 
     return TODO_OK;
 }
@@ -165,27 +154,26 @@ void generarLab(tTablero* lab)
 
     crearPila(&historial);
 
-    //srand(time(NULL));
+    srand(time(NULL));
 
-    //ESTABLECE ENTRADA Y SALIDA
-    random = 1 + rand() % lab->limite.y; //GENERA UN NUMERO ALEATORIO ENTRE 1 Y "LIMITE.Y"
+    random = rand() % ((lab->limite.y + 1) / 2);
     lab->entrada.x = 0;
-    lab->entrada.y = random;
+    lab->entrada.y = random * 2 + 1;
     lab->tablero[lab->entrada.x][lab->entrada.y] = CARACTER_ENTRADA;
 
-    random = 1 + rand() % lab->limite.y; //GENERA UN NUMERO ALEATORIO ENTRE 1 Y "LIMITE.Y"
+    random = rand() % ((lab->limite.y + 1) / 2);
     lab->salida.x = lab->limite.x - 1;
-    lab->salida.y = random;
+    lab->salida.y = random * 2 + 1;
     lab->tablero[lab->salida.x][lab->salida.y] = CARACTER_SALIDA;
 
-    //SE SITUA EN LA SALIDA
     lab->actual.x = lab->salida.x - 1;
     lab->actual.y = lab->salida.y;
     lab->tablero[lab->actual.x][lab->actual.y] = LUGAR_VACIO;
 
+    //lab->historial.tope = 0;
+
     cantidadVecinos(lab);
 
-    //BLUCLE PARA GENERAR EL CAMINO
     while(!(pilaVacia(&historial))||(lab->vecinos.cantidad > 0))
     {
         if(lab->vecinos.cantidad > 0)
@@ -193,20 +181,17 @@ void generarLab(tTablero* lab)
             coordHisto.x = lab->actual.x;
             coordHisto.y = lab->actual.y;
 
-            random = rand() % (lab->vecinos.cantidad); // ELIGE ENTRE UNO DE LOS VECINOS
+            random = rand() %(lab->vecinos.cantidad);
             lab->actual.x = lab->vecinos.vecino[random].x;
             lab->actual.y = lab->vecinos.vecino[random].y;
 
-            //REEMPLAZA EL VECINO ELEGIDO POR UN LUGAR VACIO
             lab->tablero[lab->actual.x][lab->actual.y] = LUGAR_VACIO;
             lab->tablero[(lab->actual.x + coordHisto.x)>>1][(lab->actual.y + coordHisto.y)>>1] = LUGAR_VACIO;
 
-            //SE APLILA LAS COORDENADAS PARA LLEVAR UN HISTORIAL
             apilarPila(&historial, &coordHisto, sizeof(tCoordenadas));
         }
         else
         {
-            //EN CASO DE NO ENCONTRAR VECINOS RETROCEDE DESAPILANDO LAS COORDENADAS
             desapilarPila(&historial, &coordHisto, sizeof(tCoordenadas));
 
             lab->actual.x = coordHisto.x;
@@ -215,88 +200,61 @@ void generarLab(tTablero* lab)
         cantidadVecinos(lab);
     }
 
-    //LIMPIA LA ENTRADA
+    //Limpiar entrada
 
     lab->actual.x = lab->entrada.x + 1;
     lab->actual.y = lab->entrada.y;
-    if(lab->tablero[lab->actual.x][lab->actual.y] == CARACTER_PARED)
-    {
-        lab->tablero[lab->actual.x][lab->actual.y] = LUGAR_VACIO;
-    }
-
-    //LIMPIA LA SALIDA
-
-    lab->actual.x = lab->salida.x - 1;
-    lab->actual.y = lab->salida.y;
-    if((lab->tablero[lab->actual.x][lab->actual.y] == CARACTER_PARED))
+    if((lab->actual.y - 1 > 0) && (lab->tablero[lab->actual.x][lab->actual.y - 1] == CARACTER_PARED))
     {
         lab->tablero[lab->actual.x][lab->actual.y - 1] = LUGAR_VACIO;
     }
+    if((lab->actual.y + 1 < lab->limite.y - 1) && (lab->tablero[lab->actual.x][lab->actual.y + 1] == CARACTER_PARED))
+    {
+        lab->tablero[lab->actual.x][lab->actual.y + 1] = LUGAR_VACIO;
+    }
+    if((lab->tablero[lab->actual.x + 1][lab->actual.y] == CARACTER_PARED))
+    {
+        lab->tablero[lab->actual.x + 1][lab->actual.y] = LUGAR_VACIO;
+    }
 
+    //Limpiar salida
 
-    caminosRandom(lab);
+    lab->actual.x = lab->salida.x - 1;
+    lab->actual.y = lab->salida.y;
+    if((lab->actual.y - 1 > 0) && (lab->tablero[lab->actual.x][lab->actual.y - 1] == CARACTER_PARED))
+    {
+        lab->tablero[lab->actual.x][lab->actual.y - 1] = LUGAR_VACIO;
+    }
+    if((lab->actual.y + 1 < lab->limite.y - 1) && (lab->tablero[lab->actual.x][lab->actual.y + 1] == CARACTER_PARED))
+    {
+        lab->tablero[lab->actual.x][lab->actual.y + 1] = LUGAR_VACIO;
+    }
+    if((lab->tablero[lab->actual.x - 1][lab->actual.y] == CARACTER_PARED))
+    {
+        lab->tablero[lab->actual.x - 1][lab->actual.y] = LUGAR_VACIO;
+    }
+
+   caminosRandom(lab);
 
     destruirPila(&historial);
 }
 
-
-int esPosicionValidaParaCamino(const tTablero* lab, int x, int y)
-{
-    int conexionHorizontal = 0;
-    int conexionVertical = 0;
-    // VERIFICA SI ESTA DENTRO DE LOS LIMITES
-    if(x < 2 || x >= lab->limite.x - 2) return 0;
-    if(y < 2 || y >= lab->limite.y - 2) return 0;
-
-    //VERIFICA QUE SEA UNA PARED
-    if(lab->tablero[x][y] != CARACTER_PARED)
-        return 0;
-
-    // SE FIJA SI CONECTA DOS CAMINOS EXISTENTES
-    // CONEXION HORIZONTAL (izquierda y derecha libres)
-    if((lab->tablero[x - 1][y] == LUGAR_VACIO) &&
-            (lab->tablero[x + 1][y] == LUGAR_VACIO) &&
-            (lab->tablero[x][y - 1] == CARACTER_PARED) &&
-            (lab->tablero[x][y + 1] == CARACTER_PARED))
-        conexionHorizontal = 1;
-
-    // CONEXION VERTICAL (arriba y abajo libres)
-    if((lab->tablero[x][y - 1] == LUGAR_VACIO) &&
-            (lab->tablero[x][y + 1] == LUGAR_VACIO) &&
-            (lab->tablero[x - 1][y] == CARACTER_PARED) &&
-            (lab->tablero[x + 1][y] == CARACTER_PARED))
-        conexionVertical = 1;
-
-    return conexionHorizontal || conexionVertical;
-}
-
-void caminosRandom(tTablero* lab)
-{
-    int x, y, rangoX, rangoY;
-    //int cantidadCaminos = calcularCantidadCaminosRandom(lab);
-    int cantidadCaminos = 40;
-    int caminosCreados = 0;
-    int intentos = 0;
-    int maxIntentos = cantidadCaminos * 50;  // Evita bucle infinito
-
-    while(caminosCreados < cantidadCaminos && intentos < maxIntentos)
+void caminosRandom(tTablero* lab) //la cantidad de caminos esta con una macro en tablero.v2.h capas conviene cargarlos en archivo y preguntar ahi la cantidad de caminos random, capas abria un error si son tableros chicos con muchos caminos random
+{ //capas conviene que la cantidad de caminos random se saque de una formula, ejemplo col*fil / 100 o algo asi
+    int i=0,ran;
+    while(i < CANTCAM)
     {
-
-        rangoX = (lab->limite.x - 4) / 2;
-        rangoY = (lab->limite.y - 4) / 2;
-
-        x = (rand() % rangoX) * 2 + 2;
-        y = (rand() % rangoY) * 2 + 2;
-
-        if(esPosicionValidaParaCamino(lab, x, y))
+        ran = rand() % ((lab->limite.x - 2)/2) * 2 + 2;
+        lab->actual.x = ran;
+        ran = rand() % ((lab->limite.y - 2)/2) * 2 + 2;
+        lab->actual.y = ran;
+        if((((lab->tablero[lab->actual.x - 1][lab->actual.y] == LUGAR_VACIO) && (lab->tablero[lab->actual.x + 1][lab->actual.y] == LUGAR_VACIO) && (lab->tablero[lab->actual.x][lab->actual.y + 1] == CARACTER_PARED) && (lab->tablero[lab->actual.x][lab->actual.y - 1] == CARACTER_PARED))||((lab->tablero[lab->actual.x - 1][lab->actual.y] == CARACTER_PARED) && (lab->tablero[lab->actual.x + 1][lab->actual.y] == CARACTER_PARED) && (lab->tablero[lab->actual.x][lab->actual.y + 1] == LUGAR_VACIO) && (lab->tablero[lab->actual.x][lab->actual.y - 1] == LUGAR_VACIO)))&& lab->tablero[lab->actual.x][lab->actual.y] == CARACTER_PARED)
         {
-            lab->tablero[x][y] = LUGAR_VACIO;
-            caminosCreados++;
+//            printf("%d %d \n",lab->actual.x,lab->actual.y);
+            lab->tablero[lab->actual.x][lab->actual.y] = LUGAR_VACIO;
+            i++;
         }
-
-        intentos++;
     }
-
 }
 
 tCoordenadas tableroEntrada(const tTablero *tablero)
