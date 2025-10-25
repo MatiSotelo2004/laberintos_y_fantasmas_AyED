@@ -41,3 +41,4 @@
 #define CANTCAM 20
 #define COORDENADA_NO_DISPONIBLE -2
 #define NOMBRE_ARCHIVO_HISTORIAL "jugadores.dat"
+#define CARACTER_PORTAL 'O'

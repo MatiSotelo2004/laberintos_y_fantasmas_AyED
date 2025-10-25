@@ -4,8 +4,12 @@ void mostrarCharEnPantalla(void *fp, void *elem);
 
 int main()
 {
-
     srand(time(NULL));
+    SOCKET sockCliente;
+    int servidorEncendido = iniciarServidor(&sockCliente);
+    if(servidorEncendido == SERVIDOR_OFF)
+        puts("JUGANDO EN MODO OFFLINE");
+
     tConfigTablero config;
     tTablero tablero;
     tPosObjeto objetos;
@@ -17,8 +21,8 @@ int main()
     char nombre[MAX_TAM_NOMBRE_JUGADOR];
     crearCola(&colaMovimientos);
 
-    if(mostrarMenu()==FIN_JUEGO)
-        return 0;
+//    if(mostrarMenu()==FIN_JUEGO)
+//        return 0;
 
     pedirString(MENSAJE_PEDIR_NOMBRE,nombre,MAX_TAM_NOMBRE_JUGADOR);
     configuracionTableroCargar(&config,"configs.txt");
@@ -29,6 +33,7 @@ int main()
     tCoordenadas coordenadaEntrada = tableroEntrada(&tablero);
     tCoordenadas coordenadaSalida =  tableroSalida(&tablero);
     tCoordenadas coordenadaFantasmaAux;
+    tPortal portal;
 
     unsigned cantPremios = configuracionTableroObtenerCantidadPremios(&config);
     unsigned cantVidasInicial = configuracionTableroObtenerCantidadVidasInicial(&config);
@@ -36,17 +41,20 @@ int main()
     unsigned cantFantasmas = configuracionTableroObtenerCantidadFantasmas(&config);
     objetosCrear(&objetos,&config,&coordenadaEntrada);
 
+    tableroColocarObjeto(&tablero,portalPunteroPuntoA(&portal),CARACTER_PORTAL);
+    tableroColocarObjeto(&tablero,portalPunteroPuntoB(&portal),CARACTER_PORTAL);
     tableroColocarObjetosAleatorio(&tablero, objetoPremioObtenerPunteroCoordenadas(&objetos), cantPremios, CARACTER_PREMIO);
     tableroColocarObjetosAleatorio(&tablero, objetoVidasObtenerPunteroCoordenadas(&objetos), cantVidasExtra, CARACTER_VIDA);
     tableroColocarObjetosAleatorio(&tablero, objetoFantasmasObtenerPunteroCoordenadas(&objetos,0), cantFantasmas, CARACTER_FANTASMA);
 
+    if(crearPortalEnTablero(&portal,&tablero) != PORTAL_CREADO_EXITOSO)
+        puts("AVISO: NO SE PUDO INICALIZAR PORTAL!");
 
     jugadorInicializar(&jugador,&coordenadaEntrada,cantVidasInicial,nombre);
     tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
 
     tCoordenadas jugadorCoordsAux;
     tableroColocarObjeto(&tablero,&coordenadaEntrada,CARACTER_ENTRADA);
-
     while(!coordenadasSonIguales(&coordenadaSalida,jugadorCoordenadasPuntero(&jugador)) && jugadorCantVidas(&jugador) > 0 && movimiento != '?')
     {
         jugadorCoordsAux = jugadorCoordenadas(&jugador);
@@ -70,9 +78,10 @@ int main()
                 jugadorSumarVida(&jugador);
 
             if(coordenadasSonIguales(jugadorCoordenadasPuntero(&jugador),&coordenadaEntrada))
-                tableroColocarObjeto(&tablero,&jugadorCoordsAux,CARACTER_ENTRADA);
+                tableroColocarObjeto(&tablero,jugadorCoordenadasPuntero(&jugador),CARACTER_ENTRADA);
             else
                 tableroColocarObjeto(&tablero,jugadorCoordenadasPuntero(&jugador),LUGAR_VACIO);
+
 
             for(i = 0; i < cantFantasmas; i++)
             {
@@ -81,7 +90,7 @@ int main()
                 ponerCola(&colaMovimientos,&coordenadaFantasmaAux,sizeof(tCoordenadas));
             }
 
-            actualizarMovimientosTableroDesdeCola(&colaMovimientos,&tablero, &jugador,&objetos);
+            actualizarMovimientosTableroDesdeCola(&colaMovimientos,&tablero, &jugador,&objetos,&portal);
             tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
             puts("\n\n\n\n");
         }else
@@ -91,9 +100,6 @@ int main()
     if(coordenadasSonIguales(&coordenadaSalida,jugadorCoordenadasPuntero(&jugador)))
         jugadorSumarPuntaje(&jugador, CANT_PUNTAJE_POR_GANAR);
 
-    void *aux = servidorInteractuar(sizeof(tHistorialJugador),1,LLAMADA_A_SERVIDOR_AGREGAR_JUGADOR,&jugador,seterHistorialJugador);
-    //la variable aux la uso porque esa funcion devuelve la respuesta que me dió el servidor, pero como no la necesito, la libero
-    free(aux);
 
     vaciarCola(&colaMovimientos);
     tableroDestruir(&tablero);

@@ -8,6 +8,13 @@
 #include <unistd.h>
 #include "colaDinamica.h"
 #include "jugador.h"
+#include "servidor/servidor_LyF.h"
+#define SERVIDOR_OFF 25
+#define SERVIDOR_ON 404
+#define SERVIDOR_ERROR -2
+#define EXISTE 1
+#define NO_EXISTE 0
+#define FORMATO_ENVIAR_DATOS_JUGADOR "%s,%d,%d,%d"
 
 typedef void (*Accion)(void *a, void *b);
 
@@ -20,7 +27,7 @@ typedef struct
 }tHistorialJugador;
 
 
-#define PORT 4040
+#define PORT 12345
 #define SERVER_IP "127.0.0.1"
 #define ERROR_ENVIANDO_DATOS -2
 #define ERROR_RECIBIENDO_DATOS -3
@@ -32,5 +39,5 @@ SOCKET conectarServer(const char *server_ip, int port);
 //int enviarRecibirRespuesta(SOCKET sock, const char *nombreJugador, unsigned tamElem, void *datoRecibido);
 void destruirWinsock(SOCKET sock);
 void* servidorInteractuar(unsigned tamElemEnviar, unsigned tamElemRespuesta, const char *ejecutarLlamadaAlServidor, void *extra, Accion filtroSobreDatoAEnviar);
-
+int iniciarServidor(SOCKET *sockCliente);
 #endif // HISTORIALPARTIDAS_H_INCLUDED

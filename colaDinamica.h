@@ -8,6 +8,7 @@
 #define COLA_VACIA 2
 #define TODO_OK 0
 #define SIN_MEMORIA 1
+#define ERROR_COLA -2
 #include "nodo.h"
 
 typedef struct{

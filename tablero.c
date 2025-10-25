@@ -119,7 +119,7 @@ int tableroColocarObjeto(tTablero *tablero, const tCoordenadas *obj, char caract
     if(obj->x > tablero->limite.x || obj->y > tablero->limite.y)
         return POSICION_NO_DISPONIBLE;
 
-    if(tablero->tablero[obj->x][obj->y] == CARACTER_PARED && caracter != CARACTER_ENTRADA && caracter != CARACTER_SALIDA)
+    if(tablero->tablero[obj->x][obj->y] == CARACTER_PARED && caracter != CARACTER_ENTRADA && caracter != CARACTER_SALIDA && caracter != CARACTER_PORTAL)
         return POSICION_NO_DISPONIBLE;
 
     tablero->tablero[obj->x][obj->y] = caracter;
@@ -309,4 +309,9 @@ tCoordenadas* tableroObtenerMovimientoPosible(const tTablero *tablero, const tCo
     }
 
     return disponible;
+}
+
+tCoordenadas tableroCoordenadasLimites(const tTablero *tab)
+{
+    return tab->limite;
 }

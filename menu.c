@@ -12,9 +12,9 @@ int mostrarMenu()
         {
             case OPCION_VER_HISTORIAL:
                 //verPartidas("jugadores.dat");
-                void *aux = servidorInteractuar(sizeof(NOMBRE_ARCHIVO_HISTORIAL),1,LLAMADA_A_SERVIDOR_VER_HISTORIAL,NULL,copiarNombreArchivo);
+                //void *aux = servidorInteractuar(sizeof(NOMBRE_ARCHIVO_HISTORIAL),1,LLAMADA_A_SERVIDOR_VER_HISTORIAL,NULL,copiarNombreArchivo);
                 //la variable aux la uso porque esa funcion devuelve la respuesta que me dió el servidor, pero como no la necesito, la libero
-                free(aux);
+                //free(aux);
                 break;
             case OPCION_NUEVA_PARTIDA:
                 opcion=OPCION_SALIR;

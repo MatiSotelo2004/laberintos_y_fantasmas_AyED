@@ -25,7 +25,7 @@ tCoordenadas fantasmaObtenerSiguienteMovimiento(const tTablero *tablero, const t
     return mejor;
 }
 
-void actualizarMovimientosTableroDesdeCola(tCola *colaMovimientos, tTablero *tablero, tJugador *jugador, tPosObjeto *objetos)
+void actualizarMovimientosTableroDesdeCola(tCola *colaMovimientos, tTablero *tablero, tJugador *jugador, tPosObjeto *objetos, const tPortal *portal)
 {
     tCoordenadas jugadorCoords;
     tCoordenadas fantasmasCoords;
@@ -42,7 +42,8 @@ void actualizarMovimientosTableroDesdeCola(tCola *colaMovimientos, tTablero *tab
         if(objetoEnPosicion != CARACTER_PARED
         && objetoEnPosicion != CARACTER_PREMIO
         && objetoEnPosicion != CARACTER_VIDA
-        && objetoEnPosicion != CARACTER_FANTASMA)
+        && objetoEnPosicion != CARACTER_FANTASMA
+        && objetoEnPosicion != CARACTER_PORTAL)
         {
             tableroColocarObjeto(tablero,&fantasmasCoords,CARACTER_FANTASMA);
             tableroColocarObjeto(tablero,objetoFantasmasObtenerPunteroCoordenadas(objetos,posicionPunteroFantasmas),LUGAR_VACIO);
@@ -60,6 +61,9 @@ void actualizarMovimientosTableroDesdeCola(tCola *colaMovimientos, tTablero *tab
         coordenadasCopiar(&entradaTablero,&jugadorCoords);
     }else
         jugadorSumarCantidadDeMovimiento(jugador);
+
+    if(objetoEnPosicion == CARACTER_PORTAL)
+        portalTeletransportar(portal,&jugadorCoords);
 
     tableroColocarObjeto(tablero,&jugadorCoords,CARACTER_JUGADOR);
     jugadorMover(jugador,&jugadorCoords);
@@ -90,4 +94,61 @@ void seterHistorialJugador(void *a, void *b)
     strcpy(historial->nombre,jug->nombre);
     historial->cantMov = jug->cantMovimientos;
     historial->puntos = jug->puntaje;
+}
+
+int crearPortalEnTablero(tPortal *portal, tTablero *tablero)
+{
+    char objetoEnEntradaDePortal;
+    //sirve para verificar si la posicion de entrada al portal+1
+    // es disponible
+    char objetoEnSalidaPortal;//lo mismo con la salida
+
+    tCoordenadas limiteTablero = tableroCoordenadasLimites(tablero);
+    tCoordenadas entradaPortal;
+    tCoordenadas salidaPortal;
+
+    unsigned cantIntentos = limiteTablero.x;
+
+    entradaPortal.y = 1;//en realidad va a estar en la columna cero la entrada,
+    //pero la inicializo en 1 para ver que objeto hay al lado del portal
+
+    OBTENER_NUM_ALEATORIO(1,limiteTablero.x,entradaPortal.x);
+    //limite inferior, limite superior, destino donde voy a poner el numero aleatorio
+
+    tableroVerObjeto(tablero,&entradaPortal,&objetoEnEntradaDePortal);
+
+    while(cantIntentos && (objetoEnEntradaDePortal == CARACTER_PARED || objetoEnEntradaDePortal == CARACTER_FANTASMA))
+    {
+        OBTENER_NUM_ALEATORIO(1,limiteTablero.x,entradaPortal.x);
+        tableroVerObjeto(tablero,&entradaPortal,&objetoEnEntradaDePortal);
+        cantIntentos--;
+    }
+
+    if(cantIntentos == 0)
+        return !PORTAL_CREADO_EXITOSO;
+
+    cantIntentos = limiteTablero.x;
+    salidaPortal.y = limiteTablero.y-2;
+
+    OBTENER_NUM_ALEATORIO(1,limiteTablero.x,salidaPortal.x);
+    tableroVerObjeto(tablero,&salidaPortal,&objetoEnSalidaPortal);
+
+    while(cantIntentos && (objetoEnSalidaPortal == CARACTER_PARED || objetoEnSalidaPortal == CARACTER_FANTASMA))
+    {
+        OBTENER_NUM_ALEATORIO(1,limiteTablero.x,salidaPortal.x);
+        tableroVerObjeto(tablero,&salidaPortal,&objetoEnSalidaPortal);
+        cantIntentos--;
+    }
+
+    if(cantIntentos == 0)
+        return !PORTAL_CREADO_EXITOSO;
+
+    entradaPortal.y = 0;//lo dejo como deberia estar
+    salidaPortal.y = limiteTablero.y-1;
+    portalInicializar(portal,&entradaPortal,&salidaPortal);
+
+    tableroColocarObjeto(tablero,&entradaPortal,portal->simbolo);
+    tableroColocarObjeto(tablero,&salidaPortal,portal->simbolo);
+
+    return PORTAL_CREADO_EXITOSO;
 }
