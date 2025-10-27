@@ -24,7 +24,7 @@ int servidorBuscarNombre(SOCKET *sock, const char *nombre, tJugadorDat *destino)
         return NO_EXISTE;
 
     char *datos = strtok(NULL, "");
-    sscanf(datos, FORMATO_ENVIAR_DATOS_JUGADOR, destino->nombre, &destino->cantPartidas, &destino->puntos, &destino->cantMov);
+    trozarDatosJugadorDat(datos,destino);
 
     return EXISTE;
 }
@@ -49,6 +49,7 @@ int servidorDarAltaJugador(SOCKET *sock, const char *nombre, tJugadorDat *destin
     }
     buffer[bytesRecibidos] = '\0';
     char *respuestaServer = strtok(buffer, ",");
+
     if (strcmp(respuestaServer, "ERROR") == 0)
     {
         puts("Error al crear el jugador");
@@ -57,21 +58,107 @@ int servidorDarAltaJugador(SOCKET *sock, const char *nombre, tJugadorDat *destin
 
     puts("Jugador creado con exito");
     char *datos = strtok(NULL, "");
-    sscanf(datos, FORMATO_ENVIAR_DATOS_JUGADOR, destino->nombre, &destino->cantPartidas, &destino->puntos, &destino->cantMov);
-
+    trozarDatosJugadorDat(datos,destino);
     return EXISTE;
 }
 
 int servidorCargarNuevaPartida(SOCKET *sock, const tJugadorDat *jugador)
 {
     char buffer[BUFFER_SIZE];
-    sprintf(buffer,"GUARDAR,%s,%d,%d,%d",jugador->nombre,jugador->cantPartidas + 1,jugador->puntos,jugador->cantMov);
-    if (send(*sock,buffer,strlen(buffer),0) <= 0)
+    sprintf(buffer, "GUARDAR,%s,%d,%d,%d", jugador->nombre, jugador->cantPartidas, jugador->puntos, jugador->cantMov);
+    if (send(*sock, buffer, strlen(buffer), 0) <= 0)
     {
         puts("Error al enviar datos al servidor");
         return SERVIDOR_ERROR;
     }
 
+    int bytesRecibidos = recv(*sock, buffer, BUFFER_SIZE - 1, 0);
+
+    if (bytesRecibidos <= 0)
+    {
+        puts("Error al recibir informacion del servidor");
+        return SERVIDOR_ERROR;
+    }
+
+    buffer[bytesRecibidos] = '\0';
+    char *respuestaServer = strtok(buffer, ",");
+    if (strcmp(respuestaServer, "ERROR") == 0)
+    {
+        puts("Error al actualizar jugador.");
+        return SERVIDOR_ERROR;
+    }
+
+    return TODO_OK;
+}
+
+int servidorInteractuar(SOCKET *sock, const char *peticion, char *estadoDevuelto, char *datosDevueltos)
+{
+    char buffer[BUFFER_SIZE];
+
+    if (send(*sock, peticion, strlen(peticion), 0) <= 0)
+    {
+        puts("Error al enviar datos al servidor");
+        return SERVIDOR_ERROR;
+    }
+
+    int bytesRecibidos = recv(*sock, buffer, BUFFER_SIZE - 1, 0);
+
+    if (bytesRecibidos <= 0)
+    {
+        puts("Error al recibir informacion del servidor");
+        return SERVIDOR_ERROR;
+    }
+
+    buffer[bytesRecibidos] = '\0';
+    char *respuestaServer = strtok(buffer, ",");
+    char *petDatos  = strtok(NULL, "");
+    strcpy(estadoDevuelto,respuestaServer);
+    strcpy(datosDevueltos,petDatos);
+    return TODO_OK;
+}
+
+int servidorVerHistorialPartidas(SOCKET *sock)
+{
+    char buffer[BUFFER_SIZE];
+    sprintf(buffer, "VER_HISTORIAL,");
+    if (send(*sock, buffer, strlen(buffer), 0) <= 0)
+    {
+        puts("Error al enviar datos al servidor");
+        return SERVIDOR_ERROR;
+    }
+
+    int bytesRecibidos = recv(*sock, buffer, BUFFER_SIZE - 1, 0);
+
+    if (bytesRecibidos <= 0)
+    {
+        puts("Error al recibir informacion del servidor");
+        return SERVIDOR_ERROR;
+    }
+
+    buffer[bytesRecibidos] = '\0';
+    char *respuestaServer = strtok(buffer, ",");
+    char *datos = strtok(NULL, "");
+    tJugadorDat jug;
+
+    while(strcmp(respuestaServer, "SIGUE") == 0)
+    {
+        trozarDatosJugadorDat(datos,&jug);
+        printf("Nombre: %s\nPuntaje: %d\nCantidad de Partidas: %d\nCantidad de movimientos: %d\n\n",
+               jug.nombre,jug.puntos,jug.cantPartidas,jug.cantMov);
+
+        bytesRecibidos = recv(*sock, buffer, BUFFER_SIZE - 1, 0);
+         if (bytesRecibidos <= 0)
+        {
+            puts("Error al recibir informacion del servidor");
+            return SERVIDOR_ERROR;
+        }
+        buffer[bytesRecibidos] = '\0';
+        respuestaServer = strtok(buffer, ",");
+        datos = strtok(NULL, "");
+    }
+
+    system("pause");
+    system("cls");
     return TODO_OK;
 }
 
@@ -120,4 +207,30 @@ int iniciarServidor(SOCKET *sockCliente)
 
     printf("Conectado al servidor.\n");
     return SERVIDOR_ON;
+}
+
+void trozarDatosJugadorDat(char *linea, tJugadorDat *dest)
+{
+    char *aux = strrchr(linea,',');
+    if(aux)
+    {
+        dest->cantMov = atoi(aux+1);
+        *aux = '\0';
+    }
+
+    aux = strrchr(linea,',');
+    if(aux)
+    {
+        dest->puntos = atoi(aux+1);
+        *aux = '\0';
+    }
+
+    aux = strrchr(linea,',');
+    if(aux)
+    {
+        dest->cantPartidas = atoi(aux+1);
+        *aux = '\0';
+    }
+
+    strcpy(dest->nombre,linea);
 }

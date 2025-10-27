@@ -5,8 +5,9 @@
 #include "macros.h"
 #include "HistorialPartidas.h"
 #include "Comun.h"
+#define _OPCIONES_VALIDAS "ABC"
 
-int mostrarMenu();
+int mostrarMenu(const char *opciones);
 void printOpciones();
 
 

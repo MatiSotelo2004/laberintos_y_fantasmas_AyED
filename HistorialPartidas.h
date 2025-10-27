@@ -24,20 +24,23 @@ typedef struct
     unsigned puntos;
     unsigned cantMov;
     unsigned cantPartidas;
-}tHistorialJugador;
-
+} tHistorialJugador;
 
 #define PORT 12345
 #define SERVER_IP "127.0.0.1"
 #define ERROR_ENVIANDO_DATOS -2
 #define ERROR_RECIBIENDO_DATOS -3
-#define LLAMADA_A_SERVIDOR_VER_HISTORIAL "start \"TCP Server\" \"TCP_Servidor\\bin\\Debug\\TCP_Servidor.exe\" A" // la a es el argumento que recibe el programa
-#define LLAMADA_A_SERVIDOR_AGREGAR_JUGADOR "start \"TCP Server\" \"TCP_Servidor\\bin\\Debug\\TCP_Servidor.exe\" D"// La d es el argumento que recibe el programa
 
 int inicializarWinsock(void);
 SOCKET conectarServer(const char *server_ip, int port);
-//int enviarRecibirRespuesta(SOCKET sock, const char *nombreJugador, unsigned tamElem, void *datoRecibido);
+// int enviarRecibirRespuesta(SOCKET sock, const char *nombreJugador, unsigned tamElem, void *datoRecibido);
 void destruirWinsock(SOCKET sock);
-void* servidorInteractuar(unsigned tamElemEnviar, unsigned tamElemRespuesta, const char *ejecutarLlamadaAlServidor, void *extra, Accion filtroSobreDatoAEnviar);
+int servidorBuscarNombre(SOCKET *sock, const char *nombre, tJugadorDat *destino);
+int servidorDarAltaJugador(SOCKET *sock, const char *nombre, tJugadorDat *destino);
+int servidorCargarNuevaPartida(SOCKET *sock, const tJugadorDat *jugador);
 int iniciarServidor(SOCKET *sockCliente);
+int servidorVerHistorialPartidas(SOCKET *sock);
+int servidorInteractuar(SOCKET *sock, const char *peticion, char *respuestaServer, char *datosDevueltos);
+void trozarDatosJugadorDat(char *linea, tJugadorDat *dest);
+
 #endif // HISTORIALPARTIDAS_H_INCLUDED

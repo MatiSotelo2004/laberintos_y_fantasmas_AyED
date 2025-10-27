@@ -18,12 +18,20 @@ int main()
     crearCola(&colaPeticiones);
 
     // SE ABRE EL ARCHIVO DE INDICES
-    indiceDat = fopen("Indice.dat", "a+b");
+    indiceDat = fopen("Indice.dat", "r+b");
+    if (!indiceDat)
+    {
+        indiceDat = fopen("Indice.dat", "w+b");
+    }
     // CREA EL ARBOL Y CARGA LOS INDICES
     cargarIndices(&arbolIndice, indiceDat);
 
     // SE ABRE EL ARCHIVO CON LOS DATOS DE LOS JUGADORES
-    jugadoresDat = fopen("Jugadores.dat", "a+b");
+    jugadoresDat = fopen("Jugadores.dat", "r+b");
+    if (!jugadoresDat)
+    {
+        jugadoresDat = fopen("Jugadores.dat", "w+b");
+    }
 
     if (init_winsock() != 0)
     {
@@ -59,20 +67,17 @@ int main()
         buffer[bytesRecividos] = '\0';
         printf("Recibido: %s\n", buffer);
 
-        //ENCOLA LAS PETICIONES
+        // ENCOLA LAS PETICIONES
         if (ponerCola(&colaPeticiones, buffer, BUFFER_SIZE) != TODO_OK)
             printf("Cola de peticiones llena\n");
 
-        //PROCESA LA PETICION Y DEVUELVE EL RESULTADO POR 'RESPONSE'
-        procesarPeticion(&colaPeticiones,&arbolIndice, response, jugadoresDat, indiceDat);
-
-        send(client_socket, response, strlen(response), 0);
+        // PROCESA LA PETICION Y DEVUELVE EL RESULTADO POR 'RESPONSE'
+        procesarPeticion(&colaPeticiones, &arbolIndice, response, jugadoresDat, indiceDat, client_socket);
         printf("Enviado:  %s\n", response);
     }
 
     // CIERRA LAS CONEXIONES
     printf("Conexion cerrada.\n");
-    closesocket(client_socket);
     closesocket(server_socket);
     WSACleanup();
     fclose(jugadoresDat);

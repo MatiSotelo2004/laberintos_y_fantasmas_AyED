@@ -71,6 +71,10 @@
 		</Unit>
 		<Unit filename="menu.h" />
 		<Unit filename="nodo.h" />
+		<Unit filename="nuevaPartida.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="nuevaPartida.h" />
 		<Unit filename="objetos.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -1,37 +1,34 @@
 #include "menu.h"
-int mostrarMenu()
+#include "nuevaPartida.h"
+int mostrarMenu(const char *opcionesValidas)
 {
-    char opcion=1;
-    while(miToUpper(opcion)!=OPCION_SALIR)
+    char opcion;
+    puts(TITULO);
+    printOpciones();
+
+    const char *pOpcionesValidasInicio = opcionesValidas;
+    short esOpcionValida = 0;
+
+    do
     {
-        printf("%s\n",TITULO);
-        printOpciones();
         fflush(stdin);
         scanf("%c",&opcion);
-        switch(miToUpper(opcion))
+        opcion = miToUpper(opcion);
+
+        while(*opcionesValidas && !esOpcionValida)
         {
-            case OPCION_VER_HISTORIAL:
-                //verPartidas("jugadores.dat");
-                //void *aux = servidorInteractuar(sizeof(NOMBRE_ARCHIVO_HISTORIAL),1,LLAMADA_A_SERVIDOR_VER_HISTORIAL,NULL,copiarNombreArchivo);
-                //la variable aux la uso porque esa funcion devuelve la respuesta que me dió el servidor, pero como no la necesito, la libero
-                //free(aux);
-                break;
-            case OPCION_NUEVA_PARTIDA:
-                opcion=OPCION_SALIR;
-                break;
-            case OPCION_SALIR:
-                puts("Gracias por jugar!!!");
-                puts("Saliendo...");
-                return FIN_JUEGO;
-                break;
-            default:
-                puts("Opcion incorrecta, por favor ingrese nuevamente.");
-            break;
+            if(*opcionesValidas == opcion)
+                esOpcionValida = 1;
+
+            opcionesValidas++;
         }
-        system("pause");
-        system("cls");
-    }
-    return TODO_OK;
+
+        opcionesValidas = pOpcionesValidasInicio;
+
+    }while(!esOpcionValida);
+
+    system("cls");
+    return opcion;
 }
 
 void printOpciones()
@@ -41,5 +38,5 @@ void printOpciones()
     puts("[B] Jugar nueva partida.");
     puts("[C] Salir del juego.");
     puts("--------------------------------");
-    puts("Ingrese una opcion:");
+    printf("Ingrese una opcion:");
 }
