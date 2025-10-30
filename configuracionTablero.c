@@ -44,11 +44,11 @@ int configuracionTableroCargar(tConfigTablero *config, const char *nomArch)
         */
         if(iterador == PARAMETRO_FILA_UBICACION)
         {
-            config->tamTablero.x = numAux;
+            config->tamTablero.y = numAux;
         }
         if(iterador == PARAMETRO_COLUMNA_UBICACION)
         {
-            config->tamTablero.y = numAux;
+            config->tamTablero.x = numAux;
         }
         if(iterador == PARAMETRO_VIDAS_INICIO_UBICACION)
         {

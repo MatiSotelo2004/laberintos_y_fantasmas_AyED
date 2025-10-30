@@ -2,27 +2,27 @@
 void generarLaberinto(tTablero* laberinto)
 {
     tpila historial;
+    tLista futurosCaminos;
     crearPila(&historial);
+    crearLista(&futurosCaminos);
 
     generarEntradaLab(laberinto);
-    tableroImprimir(laberinto,stdout,mostrarCharEnPantalla);
-    puts("");
     generarSalidaLab(laberinto);
+    posicionarActualEnSalidaLab(laberinto);
+    generarCaminoPrincipalLab(laberinto, &historial,&futurosCaminos);
+    puts("Camino Principal.");
     tableroImprimir(laberinto,stdout,mostrarCharEnPantalla);
     puts("");
-    inicializarInicioLab(laberinto);
+    puts("Caminos Extras.");
+    generarCaminosExtrasLab(laberinto,&futurosCaminos);
     tableroImprimir(laberinto,stdout,mostrarCharEnPantalla);
     puts("");
-
-    generarCaminoPrincipalLab(laberinto, &historial);
+    puts("Laberinto con Aberturas.");
+    generarAberturasDeCaminosLab(laberinto);
     tableroImprimir(laberinto,stdout,mostrarCharEnPantalla);
     puts("");
-    limpiarEntradaLab(laberinto);
-    limpiarSalidaLab(laberinto);
-
-    agregarCaminosAleatoriosLab(laberinto, MAX_ALEATORIOS);
-
     destruirPila(&historial);
+    vaciarLista(&futurosCaminos);
 }
 
 void generarEntradaLab(tTablero* laberinto)
@@ -43,40 +43,36 @@ void generarSalidaLab(tTablero* laberinto)
     laberinto->tablero[bordeInferior][columna] = CARACTER_SALIDA;
 }
 
-void inicializarInicioLab(tTablero* laberinto)
+void posicionarActualEnSalidaLab(tTablero* laberinto)
 {
     laberinto->actual.x = laberinto->salida.x;
     laberinto->actual.y = laberinto->salida.y-1;
     laberinto->tablero[laberinto->actual.y][laberinto->actual.x] = LUGAR_VACIO;
 }
 
-void generarCaminoPrincipalLab(tTablero* laberinto, tpila* historial)
+void generarCaminoPrincipalLab(tTablero* laberinto, tpila* historial,tLista* futurosCaminos)
 {
-    tCoordenadas meta={laberinto->entrada.x,PRIMER_INTERIOR_FILA};
-    int cont=0;
-    int limite = 100;
-    while(cont!=limite &&laberinto->tablero[meta.y][meta.x]==CARACTER_PARED){
-        calcularVecinosDisponiblesLab(laberinto);
-        if (laberinto->vecinos.cantidad > 0)
+    tCoordenadas meta = {laberinto->entrada.x,PRIMER_INTERIOR_FILA};
+    int vecinoNro;
+    while(laberinto->tablero[meta.y][meta.x]==CARACTER_PARED){
+        calcularVecinosDisponiblesPrincipalLab(laberinto);
+        if(laberinto->vecinos.cantidad > 0)
         {
+            for(vecinoNro=0;vecinoNro<laberinto->vecinos.cantidad;vecinoNro++){
+                insertarOrdenadoLista(futurosCaminos,&laberinto->vecinos.vecino[vecinoNro],sizeof(tCoordenadas),cmpVecino,SIN_DUPLICADO,NULL);
+            }
             apilarPila(historial, &laberinto->actual, sizeof(tCoordenadas));
-            trazarCaminoHaciaVecinoLab(laberinto);
-            tableroImprimir(laberinto,stdout,mostrarCharEnPantalla);
-            puts("");
+            trazarCaminoHaciaVecinoPrincipalLab(laberinto);
+            sacarPorClaveOrdenadoLista(futurosCaminos,&laberinto->actual,sizeof(tCoordenadas),cmpVecino);
         }
         else
         {
-            puts("");
-            puts("Volviendo para atras");
-            puts("");
             desapilarPila(historial, &laberinto->actual, sizeof(tCoordenadas));
         }
-        cont++;
     }
-    printf("Cantidad de iteraciones:%d\n",cont);
 }
 
-void trazarCaminoHaciaVecinoLab(tTablero* laberinto){
+void trazarCaminoHaciaVecinoPrincipalLab(tTablero* laberinto){
     tCoordenadas intermedio;
     tCoordenadas anterior = laberinto->actual;
     int eleccion = obtenerNumeroAleatorio(0, laberinto->vecinos.cantidad - 1);
@@ -98,7 +94,7 @@ tCoordenadas calcularCeldaIntermediaLab(const tCoordenadas* origen, const tCoord
     return intermedia;
 }
 
-void calcularVecinosDisponiblesLab(tTablero* laberinto)
+void calcularVecinosDisponiblesPrincipalLab(tTablero* laberinto)
 {
     int desplazamientoX[MAX_DESPLAZAMIENTOS]={-SALTO_CELDA,SALTO_CELDA,0,0};
     int desplazamientoY[MAX_DESPLAZAMIENTOS]={0,0,-SALTO_CELDA,SALTO_CELDA};
@@ -108,25 +104,17 @@ void calcularVecinosDisponiblesLab(tTablero* laberinto)
     {
         columnaVecina = laberinto->actual.x + desplazamientoX[despla];
         filaVecina = laberinto->actual.y + desplazamientoY[despla];
-        puts("");
-        printf("FilaV:%d\nColuV:%d\n",filaVecina,columnaVecina);
-        if (esVecinoValidoLab(laberinto, filaVecina, columnaVecina))
+        if (esVecinoValidoPrincipalLab(laberinto, filaVecina, columnaVecina))
         {
             laberinto->vecinos.vecino[cantidadVecinos].x = columnaVecina;
             laberinto->vecinos.vecino[cantidadVecinos].y = filaVecina;
             cantidadVecinos++;
-            puts("Vecino valido");
-        }
-        else{
-            puts("Vecino no valido");
         }
     }
-    puts("");
-    printf("Vecinos:%d\n",cantidadVecinos);
     laberinto->vecinos.cantidad = cantidadVecinos;
 }
 
-int esVecinoValidoLab(const tTablero* laberinto, int fila, int columna){
+int esVecinoValidoPrincipalLab(const tTablero* laberinto, int fila, int columna){
     if(fila < BORDE_SUPERIOR || fila >= BORDE_INFERIOR(laberinto->limite.y)){
         return NO_VALIDO;
     }
@@ -137,77 +125,279 @@ int esVecinoValidoLab(const tTablero* laberinto, int fila, int columna){
         if(laberinto->tablero[fila][columna] != CARACTER_PARED){
             return NO_VALIDO;
         }
-    }else{
-        if(fila == PRIMER_INTERIOR_FILA && laberinto->tablero[fila][columna] != CARACTER_PARED){
+        if(laberinto->tablero[fila+1][columna] != CARACTER_PARED){
             return NO_VALIDO;
         }
+        if(laberinto->tablero[fila-1][columna] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(laberinto->tablero[fila][columna-1] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(laberinto->tablero[fila][columna+1] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+    }else{
         if(columna < BORDE_IZQUIERDO || columna > BORDE_DERECHO(laberinto->limite.x)){
+            return NO_VALIDO;
+        }
+        if(columna == BORDE_IZQUIERDO && laberinto->tablero[fila][columna+1] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(columna == BORDE_DERECHO(laberinto->limite.x) && laberinto->tablero[fila][columna-1] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(laberinto->tablero[fila][columna] != CARACTER_PARED && (columna-1)==BORDE_IZQUIERDO && laberinto->tablero[fila][columna+1] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(laberinto->tablero[fila][columna] != CARACTER_PARED && (columna+1)==BORDE_DERECHO(laberinto->limite.x)
+                && laberinto->tablero[fila][columna-1] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(columna>BORDE_IZQUIERDO && laberinto->tablero[fila][columna] != CARACTER_PARED && laberinto->tablero[fila][columna-1] != CARACTER_PARED && laberinto->tablero[fila][columna+1] != CARACTER_PARED){
+            return NO_VALIDO;
+        }
+        if(fila>BORDE_SUPERIOR && columna>BORDE_IZQUIERDO && laberinto->tablero[fila][columna] != CARACTER_PARED && laberinto->tablero[fila-1][columna-1] != CARACTER_ENTRADA && laberinto->tablero[fila-1][columna+1] != CARACTER_ENTRADA){
             return NO_VALIDO;
         }
     }
     return SI_VALIDO;
 }
 
-void limpiarEntradaLab(tTablero* lab)
-{
-    unsigned fil = lab->entrada.x + 1;
-    unsigned col = lab->entrada.y;
-    if (lab->tablero[fil][col] == CARACTER_PARED)
-        lab->tablero[fil][col] = LUGAR_VACIO;
-}
 
 
-void limpiarSalidaLab(tTablero* lab)
-{
-    unsigned fil = lab->salida.x - 1;
-    unsigned col = lab->salida.y;
-    if (lab->tablero[fil][col] == CARACTER_PARED)
-        lab->tablero[fil][col] = LUGAR_VACIO;
-}
-
-void agregarCaminosAleatoriosLab(tTablero* laberinto, int cantidadDeseada)
-{
-    const int FACTOR_INTENTOS_MAX = 50; // evita bucles infinitos
-    const int MARGEN_BORDE = 2;         // evita tocar los bordes
-    int caminosCreados = 0;
-    int intentos = 0;
-    int maxIntentos = cantidadDeseada * FACTOR_INTENTOS_MAX;
-
-    int rangoFilas = (laberinto->limite.x - MARGEN_BORDE * 2) / 2;
-    int rangoColumnas = (laberinto->limite.y - MARGEN_BORDE * 2) / 2;
-
-    while (caminosCreados < cantidadDeseada && intentos < maxIntentos)
-    {
-        // Generar coordenadas aleatorias válidas (solo posiciones pares dentro del rango)
-        int fila = obtenerNumeroAleatorio(0, rangoFilas - 1) * 2 + MARGEN_BORDE;
-        int columna = obtenerNumeroAleatorio(0, rangoColumnas - 1) * 2 + MARGEN_BORDE;
-
-        if (esPosicionValidaParaCaminoLab(laberinto, fila, columna))
-        {
-            laberinto->tablero[fila][columna] = LUGAR_VACIO;
-            caminosCreados++;
-        }
-
-        intentos++;
+void generarCaminosExtrasLab(tTablero* laberinto,tLista* futurosCaminos){
+    tCoordenadas camino;
+    while(!listaVacia(futurosCaminos)){
+        sacarUltimoLista(futurosCaminos,&camino,sizeof(tCoordenadas));
+        trazarCaminoHastaDondeLlegueExtraLab(laberinto,camino);
     }
 }
 
-int esPosicionValidaParaCaminoLab(const tTablero* lab, int fila, int columna)
-{
-    // Evita abrir caminos sobre celdas ya vacías o bordes
-    if (lab->tablero[fila][columna] != CARACTER_PARED)
-        return 0;
 
-    // Evita abrir justo al lado de la entrada o salida
-    if ((fila == lab->entrada.x && columna == lab->entrada.y) ||
-        (fila == lab->salida.x && columna == lab->salida.y))
-        return 0;
-
-    return 1;
+void trazarCaminoHastaDondeLlegueExtraLab(tTablero* laberinto,tCoordenadas camino){
+    if(!esExtraValidoExtraLab(laberinto,camino.y,camino.x)){
+        return;
+    }
+    laberinto->actual = camino;
+    conectarConCaminoPrincipalExtra(laberinto);
+    do{
+    calcularExtrasDisponiblesExtraLab(laberinto,SALTO_CELDA,esExtraValidoExtraLab);
+        if(laberinto->vecinos.cantidad > 0){
+            trazarCaminosExtrasLab(laberinto);
+        }
+    }while(laberinto->vecinos.cantidad>0);
 }
+
+void trazarCaminosExtrasLab(tTablero* laberinto){
+    int indiceAleatorio = rand() % laberinto->vecinos.cantidad;
+    tCoordenadas origen = laberinto->actual;
+    tCoordenadas intermedio;
+    int vecinoNro;
+    for(vecinoNro=0;vecinoNro<laberinto->vecinos.cantidad;vecinoNro++){
+        laberinto->actual = laberinto->vecinos.vecino[vecinoNro];
+        intermedio = calcularCeldaIntermediaLab(&origen,&laberinto->actual);
+        laberinto->tablero[intermedio.y][intermedio.x] = LUGAR_VACIO;
+        if(laberinto->actual.y != BORDE_SUPERIOR && laberinto->actual.x != BORDE_IZQUIERDO && laberinto->actual.x != BORDE_DERECHO(laberinto->limite.x)){
+            laberinto->tablero[laberinto->actual.y][laberinto->actual.x] = LUGAR_VACIO;
+        }
+    }
+    laberinto->actual = laberinto->vecinos.vecino[indiceAleatorio];
+}
+
+
+void conectarConCaminoPrincipalExtra(tTablero* laberinto){
+    tCoordenadas coneccion;
+    tCoordenadas destino;
+    int fila,columna;
+    int desplazamientoX[MAX_DESPLAZAMIENTOS]={-SALTO_CELDA,SALTO_CELDA,0,0};
+    int desplazamientoY[MAX_DESPLAZAMIENTOS]={0,0,-SALTO_CELDA,SALTO_CELDA};
+    int despla=0;
+    while(laberinto->tablero[laberinto->actual.y][laberinto->actual.x]!=LUGAR_VACIO && despla<MAX_DESPLAZAMIENTOS){
+        columna = laberinto->actual.x + desplazamientoX[despla];
+        fila = laberinto->actual.y + desplazamientoY[despla];
+        if(laberinto->tablero[fila][columna]==LUGAR_VACIO)
+        {
+            destino.x=columna;
+            destino.y=fila;
+            coneccion = calcularCeldaIntermediaLab(&laberinto->actual,&destino);
+            laberinto->tablero[coneccion.y][coneccion.x]=LUGAR_VACIO;
+            laberinto->tablero[laberinto->actual.y][laberinto->actual.x] = LUGAR_VACIO;
+        }
+        despla++;
+    }
+}
+
+int esExtraValidoExtraLab(tTablero* laberinto,int fila,int columna){
+    if(fila <= BORDE_SUPERIOR || fila >= BORDE_INFERIOR(laberinto->limite.y)){
+        return NO_VALIDO;
+    }
+    if(columna <= BORDE_IZQUIERDO || columna >= BORDE_DERECHO(laberinto->limite.x)){
+        return NO_VALIDO;
+    }
+    if(laberinto->tablero[fila][columna] != CARACTER_PARED){
+        return NO_VALIDO;
+    }
+    if(laberinto->tablero[fila-1][columna] != CARACTER_PARED || laberinto->tablero[fila+1][columna] != CARACTER_PARED || laberinto->tablero[fila][columna+1] != CARACTER_PARED || laberinto->tablero[fila][columna-1] != CARACTER_PARED){
+        return NO_VALIDO;
+    }
+    return SI_VALIDO;
+}
+
+void calcularExtrasDisponiblesExtraLab(tTablero* laberinto,int salto,Validacion valido){
+    int desplazamientoX[MAX_DESPLAZAMIENTOS]={-salto,salto,0,0};
+    int desplazamientoY[MAX_DESPLAZAMIENTOS]={0,0,-salto,salto};
+    int filaVecina, columnaVecina;
+    int cantidadVecinos = 0;
+    for(int despla=0;despla< MAX_DESPLAZAMIENTOS;despla++)
+    {
+        columnaVecina = laberinto->actual.x + desplazamientoX[despla];
+        filaVecina = laberinto->actual.y + desplazamientoY[despla];
+        if (valido(laberinto, filaVecina, columnaVecina))
+        {
+            laberinto->vecinos.vecino[cantidadVecinos].x = columnaVecina;
+            laberinto->vecinos.vecino[cantidadVecinos].y = filaVecina;
+            cantidadVecinos++;
+        }
+    }
+    laberinto->vecinos.cantidad = cantidadVecinos;
+}
+
+void generarAberturasDeCaminosLab(tTablero* laberinto) {
+    int filasInternas = laberinto->limite.y - 2;
+    int columnasInternas = laberinto->limite.x - 2;
+    int celdasInternas = filasInternas * columnasInternas;
+    int paredesARomper = (int)(celdasInternas * DENSIDAD);
+    int aberturas = 0;
+
+    int maxFilasElegidas = filasInternas / 2;
+    if (maxFilasElegidas < 2)
+        maxFilasElegidas = filasInternas;
+
+    int filasElegidas[filasInternas];
+    for (int i = 0; i < filasInternas; i++)
+        filasElegidas[i] = i + 1;
+
+    // Mezclar filas aleatoriamente (Fisher-Yates)
+    for (int i = filasInternas - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        int temp = filasElegidas[i];
+        filasElegidas[i] = filasElegidas[j];
+        filasElegidas[j] = temp;
+    }
+
+    // ðŸ”“ Fila de entrada completamente libre
+    for (int j = 1; j < laberinto->limite.x - 1; j++) {
+        if (laberinto->tablero[PRIMER_INTERIOR_FILA][j] != 'E') {
+            laberinto->tablero[PRIMER_INTERIOR_FILA][j] = LUGAR_VACIO;
+        }
+    }
+
+    // ðŸ”“ Fila de salida completamente libre
+    int filaSalida = ULTIMO_INTERIOR_FILA(laberinto->limite.y);
+    for (int j = 1; j < laberinto->limite.x - 1; j++) {
+        if (laberinto->tablero[filaSalida][j] != 'S') {
+            laberinto->tablero[filaSalida][j] = LUGAR_VACIO;
+        }
+    }
+
+    // ðŸŒ€ ABERTURAS ALEATORIAS GENERALES
+    int filasUsadas = (paredesARomper / 2 < maxFilasElegidas) ? (paredesARomper / 2) : maxFilasElegidas;
+
+    for (int i = 0; i < filasUsadas && aberturas < paredesARomper; i++) {
+        int fila = filasElegidas[i];
+        // Evitamos modificar filas de entrada y salida
+        if (fila == PRIMER_INTERIOR_FILA || fila == filaSalida)
+            continue;
+
+        int columnasElegidas[columnasInternas];
+        for (int j = 0; j < columnasInternas; j++)
+            columnasElegidas[j] = j + 1;
+
+        // Mezclar columnas
+        for (int j = columnasInternas - 1; j > 0; j--) {
+            int k = rand() % (j + 1);
+            int temp = columnasElegidas[j];
+            columnasElegidas[j] = columnasElegidas[k];
+            columnasElegidas[k] = temp;
+        }
+
+        int maxAberturasFila = 1 + rand() % 3;
+        int aberturasPorFila = 0;
+
+        for (int j = 0; j < columnasInternas && aberturasPorFila < maxAberturasFila && aberturas < paredesARomper; j++) {
+            int columna = columnasElegidas[j];
+            if (esAberturaValidaLab(laberinto, fila, columna)) {
+                laberinto->tablero[fila][columna] = LUGAR_VACIO;
+                aberturas++;
+                aberturasPorFila++;
+            }
+        }
+    }
+
+    printf("Aberturas creadas: %d de %d\n", aberturas, paredesARomper);
+}
+
+int esAberturaValidaLab(const tTablero* laberinto,int fila,int columna){
+    int paredesVecinas=0;
+    tCoordenadas actual={columna,fila};
+    if(laberinto->tablero[fila][columna]==LUGAR_VACIO){
+        return NO_VALIDO;
+    }
+    contarParedesVecinas(laberinto,actual,&paredesVecinas);
+    if(paredesVecinas!=2){
+        return NO_VALIDO;
+    }
+    if(fila!=PRIMER_INTERIOR_FILA && fila!=ULTIMO_INTERIOR_FILA(laberinto->limite.y) && columna!=ULTIMO_INTERIOR_COL(laberinto->limite.x) && columna!=PRIMER_INTERIOR_COL){
+        if(laberinto->tablero[fila-1][columna]==CARACTER_PARED && (laberinto->tablero[fila][columna-1]==CARACTER_PARED || laberinto->tablero[fila][columna+1]==CARACTER_PARED)){
+            return NO_VALIDO;
+        }
+        if(laberinto->tablero[fila+1][columna]==CARACTER_PARED && (laberinto->tablero[fila][columna-1]==CARACTER_PARED || laberinto->tablero[fila][columna+1]==CARACTER_PARED)){
+            return NO_VALIDO;
+        }
+    }
+    if(columna==PRIMER_INTERIOR_COL && fila==PRIMER_INTERIOR_FILA){
+        return NO_VALIDO;
+    }
+    return SI_VALIDO;
+}
+
+void contarParedesVecinas(const tTablero* laberinto,tCoordenadas actual,int* paredesVecinas){
+    int contador=0;
+    if(actual.y!=PRIMER_INTERIOR_FILA && laberinto->tablero[actual.y-1][actual.x]==CARACTER_PARED){
+        contador++;
+    }
+    if(actual.y!=ULTIMO_INTERIOR_FILA(laberinto->limite.y) && laberinto->tablero[actual.y+1][actual.x]==CARACTER_PARED){
+        contador++;
+    }
+    if(actual.x!=PRIMER_INTERIOR_COL && laberinto->tablero[actual.y][actual.x-1]==CARACTER_PARED){
+        contador++;
+    }
+    if(actual.x!=ULTIMO_INTERIOR_COL(laberinto->limite.x) && laberinto->tablero[actual.y][actual.x+1]==CARACTER_PARED){
+        contador++;
+    }
+    *paredesVecinas=contador;
+}
+
 
 void mostrarCharEnPantalla(void *fp, void *elem)
 {
-    fprintf((FILE*)fp,"%c",(*(char*)elem));
+    char caracter = *(char*)elem;
+    fprintf((FILE*)fp, "%c", caracter);
 }
+
+void mostrarVecino(const void* a){
+    tCoordenadas* vecino= (tCoordenadas*)a;
+    printf("Fila:%d | Columna:%d\n",vecino->y,vecino->x);
+}
+
+int cmpVecino(const void* a, const void* b) {
+    tCoordenadas* primero = (tCoordenadas*)a;
+    tCoordenadas* segundo = (tCoordenadas*)b;
+    if (primero->y != segundo->y)
+        return primero->y - segundo->y;
+    return primero->x - segundo->x;
+}
+
+
 

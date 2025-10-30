@@ -9,6 +9,8 @@ void mostrarCharEnPantalla(void *fp, void *elem);
 int main()
 {
 
+   // system("start powershell -NoExit -Command \"cd 'C:\\Users\\LucianoRomano\\Desktop\\Facultad\\laberintos_y_fantasmas_AyED\\bin\\Debug'; ./tableroLaberintosFantasmas.exe\"");
+
     /*
      *
      * PREGUNTAS
@@ -31,15 +33,16 @@ int main()
 
     configuracionTableroCargar(&config,"configs.txt");
     tableroCrear(&tablero,&config);
-    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
-    puts("Hasta aca se creo");
+//    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
+//    puts("Hasta aca se creo");
     tableroInicializar(&tablero, CARACTER_PARED);
-    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
-    puts("Hasta aca se inicializo");
+//    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
+//    puts("Hasta aca se inicializo");
     tableroDibujarParedes(&tablero);
-    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
-    puts("Hasta aca se agrego las paredes");
+//    tableroImprimir(&tablero,stdout,mostrarCharEnPantalla);
+//    puts("Hasta aca se agrego las paredes");
     generarLaberinto(&tablero);
+
     tCoordenadas coordenadaEntrada = tableroEntrada(&tablero);
     tCoordenadas coordenadaSalida =  tableroSalida(&tablero);
     tCoordenadas coordenadaFantasmaAux;
