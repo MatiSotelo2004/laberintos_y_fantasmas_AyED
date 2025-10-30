@@ -38,14 +38,14 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Comun.h" />
-		<Unit filename="HistorialPartidas.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="HistorialPartidas.h" />
 		<Unit filename="Portal.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Portal.h" />
+		<Unit filename="cliente_LyF.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="cliente_LyF.h" />
 		<Unit filename="colaDinamica.c">
 			<Option compilerVar="CC" />
 		</Unit>

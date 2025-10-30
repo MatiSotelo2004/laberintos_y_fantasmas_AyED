@@ -6,7 +6,7 @@
 #include<string.h>
 
 #define TODO_OK 0
-#define SIN_MEM 1
+#define SIN_MEM -1
 #define  EXISTE 1
 
 typedef struct sNodoArbol{

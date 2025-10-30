@@ -82,5 +82,6 @@ int main()
     WSACleanup();
     fclose(jugadoresDat);
     fclose(indiceDat);
+    destruirArbol(&arbolIndice);
     return 0;
 }

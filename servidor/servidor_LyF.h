@@ -19,6 +19,7 @@
 #include "../colaDinamica.h"
 #include "arbol.h"
 #include <windows.h>
+#include "lista.h"
 
 typedef struct
 {
@@ -46,4 +47,5 @@ int procesarPeticion(tCola *colaPeticiones, tArbol *arbolIndice, char *response,
 void mostrarArchivo(FILE *fp);
 int obtenerOpcion(const char *operacion);
 void trozarDatosJugador(char *linea, tJugadorDat *dest);
+int compararPuntaje(const void *x, const void*y);
 #endif // SERVIDOR_LYF_H

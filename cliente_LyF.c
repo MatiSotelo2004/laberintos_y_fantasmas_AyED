@@ -1,4 +1,4 @@
-#include "HistorialPartidas.h"
+#include "cliente_LyF.h"
 
 int servidorBuscarNombre(SOCKET *sock, const char *nombre, tJugadorDat *destino)
 {

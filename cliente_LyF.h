@@ -1,5 +1,5 @@
-#ifndef HISTORIALPARTIDAS_H_INCLUDED
-#define HISTORIALPARTIDAS_H_INCLUDED
+#ifndef CLIENTE_LYF_H_INCLUDED
+#define CLIENTE_LYF_H_INCLUDED
 #include "macros.h"
 
 #include <winsock2.h>
@@ -43,4 +43,4 @@ int servidorVerHistorialPartidas(SOCKET *sock);
 int servidorInteractuar(SOCKET *sock, const char *peticion, char *respuestaServer, char *datosDevueltos);
 void trozarDatosJugadorDat(char *linea, tJugadorDat *dest);
 
-#endif // HISTORIALPARTIDAS_H_INCLUDED
+#endif // CLIENTE_LYF_H_INCLUDED

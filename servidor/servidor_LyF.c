@@ -126,14 +126,23 @@ int procesarPeticion(tCola *colaPeticiones, tArbol *arbolIndice, char *response,
         break;
 
     case OP_HISTORIAL:
+        tLista rankingJugadores;
+        crearLista(&rankingJugadores);
         rewind(JugadoresDat);
+
         fread(&datosJugador, sizeof(tJugadorDat), 1, JugadoresDat);
         while(!feof(JugadoresDat))
         {
+            listaInsertarOrdenado(&rankingJugadores, &datosJugador, sizeof(tJugadorDat), compararPuntaje);
+            fread(&datosJugador, sizeof(tJugadorDat), 1, JugadoresDat);
+        }
+
+        while(listaVacia(&rankingJugadores)!=LISTA_VACIA)
+        {
+            listaSacarPrimero(&rankingJugadores, &datosJugador, sizeof(tJugadorDat));
             sprintf(response, "SIGUE,%s,%d,%d,%d", datosJugador.nombre, datosJugador.cantPartidas, datosJugador.puntos, datosJugador.cantMov);
             send(sockCliente, response, strlen(response), 0);
-            Sleep(15);//genera una pausa de 10ms, esto le da tiempo al cliente para recibir las respuestas.
-            fread(&datosJugador, sizeof(tJugadorDat), 1, JugadoresDat);
+            Sleep(10);//genera una pausa de 10ms, esto le da tiempo al cliente para recibir las respuestas.
         }
         strcpy(response,"FIN,Fin de la lista de jugadores");
         break;
@@ -197,4 +206,12 @@ void trozarDatosJugador(char *linea, tJugadorDat *dest)
     }
 
     strcpy(dest->nombre,linea);
+}
+
+int compararPuntaje(const void *x, const void*y)
+{
+    tJugadorDat *jug1=(tJugadorDat*)x,
+                 *jug2=(tJugadorDat*)y;
+
+    return jug2->puntos - jug1->puntos;
 }

@@ -9,7 +9,7 @@
 #include "configuracionTablero.h"
 #include "jugador.h"
 #include "macros.h"
-#include "HistorialPartidas.h"
+#include "cliente_LyF.h"
 #include "menu.h"
 
 void pedirString(const char *mensaje, char *dest,unsigned tamMax);
