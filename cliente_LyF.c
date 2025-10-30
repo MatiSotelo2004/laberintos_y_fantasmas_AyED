@@ -4,28 +4,12 @@ int servidorBuscarNombre(SOCKET *sock, const char *nombre, tJugadorDat *destino)
 {
     char buffer[BUFFER_SIZE];
     sprintf(buffer, "BUSCAR,%s", nombre);
-
-    if (send(*sock, buffer, strlen(buffer), 0) < 0)
-    {
-        puts("Error al enviar informacion al servidor");
-        return SERVIDOR_ERROR;
-    }
-    int bytesRecibidos = recv(*sock, buffer, BUFFER_SIZE - 1, 0);
-
-    if (bytesRecibidos <= 0)
-    {
-        puts("Error al recibir informacion del servidor");
-        return SERVIDOR_ERROR;
-    }
-
-    buffer[bytesRecibidos] = '\0';
-    char *respuestaServer = strtok(buffer, ",");
-    if (strcmp(respuestaServer, "ERROR") == 0)
+    char respuesta[BUFFER_SIZE];
+    char datosRespuesta[BUFFER_SIZE];
+    if(servidorInteractuar(sock,buffer,respuesta,datosRespuesta) == SERVIDOR_ERROR)
         return NO_EXISTE;
 
-    char *datos = strtok(NULL, "");
-    trozarDatosJugadorDat(datos,destino);
-
+    trozarDatosJugadorDat(datosRespuesta,destino);
     return EXISTE;
 }
 
@@ -33,58 +17,28 @@ int servidorDarAltaJugador(SOCKET *sock, const char *nombre, tJugadorDat *destin
 {
     char buffer[BUFFER_SIZE];
     sprintf(buffer, "ALTA,%s", nombre);
-
-    if (send(*sock, buffer, strlen(buffer), 0) < 0)
+    char respuesta[BUFFER_SIZE];
+    char datosRespuesta[BUFFER_SIZE];
+    if(servidorInteractuar(sock,buffer,respuesta,datosRespuesta) != TODO_OK)
     {
-        puts("Error al enviar informacion al servidor");
+        puts("No se puede dar de alta el jugador nuevo.");
         return SERVIDOR_ERROR;
-    }
-
-    int bytesRecibidos = recv(*sock, buffer, BUFFER_SIZE - 1, 0);
-
-    if (bytesRecibidos <= 0)
-    {
-        puts("Error al recibir informacion del servidor");
-        return SERVIDOR_ERROR;
-    }
-    buffer[bytesRecibidos] = '\0';
-    char *respuestaServer = strtok(buffer, ",");
-
-    if (strcmp(respuestaServer, "ERROR") == 0)
-    {
-        puts("Error al crear el jugador");
-        return NO_EXISTE;
     }
 
     puts("Jugador creado con exito");
-    char *datos = strtok(NULL, "");
-    trozarDatosJugadorDat(datos,destino);
-    return EXISTE;
+    trozarDatosJugadorDat(datosRespuesta,destino);
+    return TODO_OK;
 }
 
 int servidorCargarNuevaPartida(SOCKET *sock, const tJugadorDat *jugador)
 {
     char buffer[BUFFER_SIZE];
     sprintf(buffer, "GUARDAR,%s,%d,%d,%d", jugador->nombre, jugador->cantPartidas, jugador->puntos, jugador->cantMov);
-    if (send(*sock, buffer, strlen(buffer), 0) <= 0)
+    char respuesta[BUFFER_SIZE];
+    char datosRespuesta[BUFFER_SIZE];
+    if(servidorInteractuar(sock,buffer,respuesta,datosRespuesta) != TODO_OK)
     {
         puts("Error al enviar datos al servidor");
-        return SERVIDOR_ERROR;
-    }
-
-    int bytesRecibidos = recv(*sock, buffer, BUFFER_SIZE - 1, 0);
-
-    if (bytesRecibidos <= 0)
-    {
-        puts("Error al recibir informacion del servidor");
-        return SERVIDOR_ERROR;
-    }
-
-    buffer[bytesRecibidos] = '\0';
-    char *respuestaServer = strtok(buffer, ",");
-    if (strcmp(respuestaServer, "ERROR") == 0)
-    {
-        puts("Error al actualizar jugador.");
         return SERVIDOR_ERROR;
     }
 
