@@ -1,4 +1,4 @@
-#include"arbol.h"
+#include "tda_arbol.h"
 
 
 void crearArbol(tArbol*p)
@@ -29,14 +29,14 @@ int insertarArbolBinNoR(tArbol*p, const void*dato, unsigned tamDato, int (*cmp)(
     }
     nue = (tNodoArbol*)malloc(sizeof(tNodoArbol));
     if(!nue)
-        return SIN_MEM;
+        return SIN_MEMORIA;
 
     nue->dato=malloc(tamDato);
 
     if(!nue->dato)
     {
         free(nue);
-        return SIN_MEM;
+        return SIN_MEMORIA;
     }
 
     memcpy(nue->dato, dato, tamDato);
@@ -57,13 +57,13 @@ int insertarArbolBinConR(tArbol*p, const void*dato, unsigned tamDato, int (*cmp)
         nue=(tNodoArbol*)malloc(sizeof(tNodoArbol));
         if(!nue)
         {
-            return SIN_MEM;
+            return SIN_MEMORIA;
         }
         nue->dato=malloc(tamDato);
         if(!nue->dato)
         {
             free(nue);
-            return SIN_MEM;
+            return SIN_MEMORIA;
         }
         memcpy(nue->dato, dato, tamDato);
         nue->der=NULL;

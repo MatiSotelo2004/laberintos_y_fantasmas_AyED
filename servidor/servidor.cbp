@@ -22,18 +22,19 @@
 				<Option compiler="gcc-mingw32" />
 			</Target>
 		</Build>
-		<Unit filename="../colaDinamica.c">
+		<Unit filename="../estructuras/nodo.h" />
+		<Unit filename="../estructuras/tda_arbol.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../colaDinamica.h" />
-		<Unit filename="arbol.c">
+		<Unit filename="../estructuras/tda_arbol.h" />
+		<Unit filename="../estructuras/tda_cola_dinamica.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="arbol.h" />
-		<Unit filename="lista.c">
+		<Unit filename="../estructuras/tda_cola_dinamica.h" />
+		<Unit filename="../estructuras/tda_lista_doble.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="lista.h" />
+		<Unit filename="../estructuras/tda_lista_doble.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

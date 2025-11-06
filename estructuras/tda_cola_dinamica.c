@@ -1,4 +1,4 @@
-#include "colaDinamica.h"
+#include "tda_cola_dinamica.h"
 
 void crearCola(tCola* cola){
     cola->pri = cola->ult = NULL;

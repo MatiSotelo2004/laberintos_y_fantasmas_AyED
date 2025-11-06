@@ -1,13 +1,6 @@
 #ifndef ARBOL_H_INCLUDED
 #define ARBOL_H_INCLUDED
-
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-#define TODO_OK 0
-#define SIN_MEM -1
-#define  EXISTE 1
+#include "nodo.h"
 
 typedef struct sNodoArbol{
     void *dato;
@@ -15,10 +8,8 @@ typedef struct sNodoArbol{
     struct sNodoArbol *izq;
     struct sNodoArbol *der;
 }tNodoArbol;
-typedef tNodoArbol* tArbol;
 
-typedef void (*Accion) (void *a, void *b);
-typedef int (*Cmp)(const void *a, const void *b);
+typedef tNodoArbol* tArbol;
 
 void crearArbol(tArbol*p);
 void destruirArbol(tArbol*p);

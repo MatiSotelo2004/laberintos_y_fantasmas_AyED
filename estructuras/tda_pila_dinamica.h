@@ -1,15 +1,8 @@
-#ifndef PILAD_H
-#define PILAD_E
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define TODO_OK 0
-#define ERROR_PILA 1
-#define TAM_PILA 1000
-
+#ifndef TDA_PILA_DINAMICA_H
+#define TDA_PILA_DINAMICA_E
 #include "nodo.h"
+
+#define ERROR_PILA 1
 
 typedef tNodo *tpila;
 
@@ -21,4 +14,4 @@ int pilaLlena(const tpila *pila, unsigned tamDato);
 int verTope(const tpila *pila, void *dato, unsigned tamDato);
 void destruirPila(tpila *pila);
 
-#endif // PILAD_H
+#endif // TDA_PILA_DINAMICA_H

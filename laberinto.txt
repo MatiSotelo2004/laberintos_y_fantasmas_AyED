@@ -1,0 +1,55 @@
+   01234567890123456
+ 0|#############E###
+ 1|#.......V.V.....#
+ 2|##V#F#P#F#F#.####
+ 3|##.#.#V#F..#...##
+ 4|##F#.#V#####F####
+ 5|##.#.#F#.F.#VVV##
+ 6|##.###.#.#.###.##
+ 7|##.....#V....#.##
+ 8|##.#.#.#####.#.##
+ 9|##...#.....#P...#
+10|##.#.#.#.#.#.#.##
+11|OP...V...F...F..O
+12|##############S##
+
+El jugador realizo los siguientes movimientos:
+Movimiento  1: y= 0|x=13
+Movimiento  2: y= 1|x=13
+Movimiento  3: y= 1|x=12
+Movimiento  4: y= 1|x=11 - En el siguiente movimiento el jugador se encontro una vida, aumento su cantidad de vidas.
+Movimiento  5: y= 1|x=10 - En el siguiente movimiento el jugador se encontro con un fantasma, por lo que vuelve a la entreda con una vida menos.
+Movimiento  6: y= 0|x=13
+Movimiento  7: y= 1|x=13
+Movimiento  8: y= 1|x=12
+Movimiento  9: y= 0|x=13
+Movimiento 10: y= 1|x=13
+Movimiento 11: y= 1|x=14
+Movimiento 12: y= 0|x=13
+Movimiento 13: y= 1|x=13
+Movimiento 14: y= 1|x=12
+Movimiento 15: y= 2|x=12
+Movimiento 16: y= 3|x=12
+Movimiento 17: y= 3|x=13
+Movimiento 18: y= 3|x=12
+Movimiento 19: y= 4|x=12 - En el siguiente movimiento el jugador se encontro una vida, aumento su cantidad de vidas.
+Movimiento 20: y= 5|x=12 - En el siguiente movimiento el jugador se encontro una vida, aumento su cantidad de vidas.
+Movimiento 21: y= 5|x=13 - En el siguiente movimiento el jugador se encontro una vida, aumento su cantidad de vidas.
+Movimiento 22: y= 5|x=14
+Movimiento 23: y= 6|x=14
+Movimiento 24: y= 7|x=14
+Movimiento 25: y= 8|x=14
+Movimiento 26: y= 9|x=14
+Movimiento 27: y=10|x=14
+Movimiento 28: y= 9|x=14
+Movimiento 29: y= 9|x=13 - En el siguiente movimiento el jugador se encontro un premio, suma un punto.
+Movimiento 30: y= 9|x=12
+Movimiento 31: y= 0|x=13
+Movimiento 32: y= 1|x=13
+Movimiento 33: y= 1|x=12
+Movimiento 34: y= 1|x=11
+Movimiento 35: y= 0|x=13
+Movimiento 36: y= 1|x=13
+Movimiento 37: y= 1|x=12
+Movimiento 38: y= 0|x=13
+Movimiento 39: y= 1|x=13

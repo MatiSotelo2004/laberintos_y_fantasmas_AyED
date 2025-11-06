@@ -1,4 +1,4 @@
-#include "pilad.h"
+#include "tda_pila_dinamica.h"
 
 void crearPila(tpila *pila)
 {

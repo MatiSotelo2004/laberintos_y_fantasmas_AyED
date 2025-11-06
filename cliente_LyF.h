@@ -1,14 +1,16 @@
 #ifndef CLIENTE_LYF_H_INCLUDED
 #define CLIENTE_LYF_H_INCLUDED
-#include "macros.h"
 
 #include <winsock2.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "colaDinamica.h"
-#include "jugador.h"
+
+#include "estructuras/tda_cola_dinamica.h"
+
+#include "juego/jugador.h"
 #include "servidor/servidor_LyF.h"
+
 #define SERVIDOR_OFF 25
 #define SERVIDOR_ON 404
 #define SERVIDOR_ERROR -2

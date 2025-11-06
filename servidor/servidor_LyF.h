@@ -16,10 +16,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <winsock2.h>
-#include "../colaDinamica.h"
-#include "arbol.h"
+#include "../estructuras/tda_cola_dinamica.h"
+#include "../estructuras/tda_arbol.h"
+#include "../estructuras/tda_lista_doble.h"
 #include <windows.h>
-#include "lista.h"
 
 typedef struct
 {

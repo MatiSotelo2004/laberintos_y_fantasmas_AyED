@@ -1,7 +1,0 @@
-filas: 21
-columnas: 41
-vida_inicial: 2
-fantasmas: 0
-premios: 2
-vida_extra: 2...
-

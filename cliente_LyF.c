@@ -7,8 +7,10 @@ int servidorBuscarNombre(SOCKET *sock, const char *nombre, tJugadorDat *destino)
     char respuesta[BUFFER_SIZE];
     char datosRespuesta[BUFFER_SIZE];
     if(servidorInteractuar(sock,buffer,respuesta,datosRespuesta) == SERVIDOR_ERROR)
+        return SERVIDOR_ERROR;
+    if(strcmp(respuesta,"ERROR")==0){
         return NO_EXISTE;
-
+    }
     trozarDatosJugadorDat(datosRespuesta,destino);
     return EXISTE;
 }

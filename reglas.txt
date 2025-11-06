@@ -1,0 +1,37 @@
+#INTRODUCCION:
+
+El Jugador (J) debera atravesar el laberinto desde la Entrada (E) hasta la Salida (S) evitando ser capturado 
+por alguno de los Fantasmas (F). 
+A lo largo del laberinto se encuentran distribuidos un conjunto de Premios (P) que dan puntos, Vidas extra (V) 
+que permite incrementar el numero de vidas disponibles para jugar y dos Portales (O) que le permiten al jugador
+teletransportarse hacia el otro portal. 
+
+Si el jugador es capturado por un fantasma, perdera una vida y regresara a la entrada, el fantasma sera eliminado 
+del laberinto y en caso de haber otros fantasmas se reposicionaran. 
+Cuando el jugador capture un premio se incrementara el Contador de Premios. Si el jugador hubiera capturado un premio 
+y luego es capturado por un fantasma, al continuar el juego se mantendra el estado actual de los premios. 
+Cuando el jugador capture una vida, se incrementara el Numero de Vidas y tendra mayores posibilidades de finalizar 
+la travesía de manera exitosa. 
+
+#CONFIGURACION:
+
+El juego se encuentra previamente configurado mediante un archivo con el nombre de "config.txt" en este se pueden 
+modificar el numero de elementos que contendra nuestro laberinto: limites del laberinto, cantidad de fantasmas, cantidad
+de vidas extra, cantidad de premios y con cuantas vidas comenzara el jugador. 
+
+#CONTROLES:
+
+Los teclas para poder jugar y desplazarse por el laberinto son 'a-w-s-d'.
+-Arriba:    'w'
+-Abajo:     's'
+-Izquierda: 'a'
+-Derecha:   'd'
+
+#FIN DEL JUEGO:
+
+Cuando el jugador llegue a la salida o se quede sin vidas el juego finalizara con un mensaje correspondiente.
+Tambien podra consultar el registro de movimientos realizados por el jugador durante el juego.
+
+Siempre al finalizar se generara un archivo con el nombre de "laberinto.txt" donde podra ver el laberinto inicial junto al 
+registro de movimientos realizados por el jugador.
+

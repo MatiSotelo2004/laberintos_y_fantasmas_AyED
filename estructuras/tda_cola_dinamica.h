@@ -1,15 +1,10 @@
 #ifndef COLADINAMICA_H_INCLUDED
 #define COLADINAMICA_H_INCLUDED
-#include "stdlib.h"
-#include "stdio.h"
-#include "string.h"
-#include "ctype.h"
-#define COLA_LLENA 1
-#define COLA_VACIA 2
-#define TODO_OK 0
-#define SIN_MEMORIA 1
-#define ERROR_COLA -2
 #include "nodo.h"
+
+#define COLA_VACIA 1
+#define COLA_LLENA 2
+#define ERROR_COLA -2
 
 typedef struct{
     tNodo* pri;

@@ -133,13 +133,13 @@ int procesarPeticion(tCola *colaPeticiones, tArbol *arbolIndice, char *response,
         fread(&datosJugador, sizeof(tJugadorDat), 1, JugadoresDat);
         while(!feof(JugadoresDat))
         {
-            listaInsertarOrdenado(&rankingJugadores, &datosJugador, sizeof(tJugadorDat), compararPuntaje);
+            insertarOrdenadoLista(&rankingJugadores, &datosJugador, sizeof(tJugadorDat),compararPuntaje,CON_DUPLICADO,NULL);
             fread(&datosJugador, sizeof(tJugadorDat), 1, JugadoresDat);
         }
 
         while(listaVacia(&rankingJugadores)!=LISTA_VACIA)
         {
-            listaSacarPrimero(&rankingJugadores, &datosJugador, sizeof(tJugadorDat));
+            sacarPrimeroLista(&rankingJugadores, &datosJugador, sizeof(tJugadorDat));
             sprintf(response, "SIGUE,%s,%d,%d,%d", datosJugador.nombre, datosJugador.cantPartidas, datosJugador.puntos, datosJugador.cantMov);
             send(sockCliente, response, strlen(response), 0);
             Sleep(10);//genera una pausa de 10ms, esto le da tiempo al cliente para recibir las respuestas.

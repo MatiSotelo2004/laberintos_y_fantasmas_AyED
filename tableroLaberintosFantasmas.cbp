@@ -34,59 +34,62 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="Comun.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Comun.h" />
-		<Unit filename="Portal.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Portal.h" />
 		<Unit filename="cliente_LyF.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="cliente_LyF.h" />
-		<Unit filename="colaDinamica.c">
+		<Unit filename="comun.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="colaDinamica.h" />
-		<Unit filename="configuracionTablero.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="configuracionTablero.h" />
+		<Unit filename="comun.h" />
 		<Unit filename="coordenadas.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="coordenadas.h" />
-		<Unit filename="jugador.c">
+		<Unit filename="estructuras/nodo.h" />
+		<Unit filename="estructuras/tda_cola_dinamica.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="jugador.h" />
-		<Unit filename="macros.h" />
+		<Unit filename="estructuras/tda_cola_dinamica.h" />
+		<Unit filename="estructuras/tda_lista_doble.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="estructuras/tda_lista_doble.h" />
+		<Unit filename="estructuras/tda_pila_dinamica.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="estructuras/tda_pila_dinamica.h" />
+		<Unit filename="juego.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego.h" />
+		<Unit filename="juego/configuracion.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego/configuracion.h" />
+		<Unit filename="juego/fantasmas.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego/fantasmas.h" />
+		<Unit filename="juego/jugador.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego/jugador.h" />
+		<Unit filename="juego/laberinto.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego/laberinto.h" />
+		<Unit filename="juego/portal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego/portal.h" />
+		<Unit filename="juego/tablero.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego/tablero.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="menu.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="menu.h" />
-		<Unit filename="nodo.h" />
-		<Unit filename="nuevaPartida.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="nuevaPartida.h" />
-		<Unit filename="objetos.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="objetos.h" />
-		<Unit filename="pilad.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="pilad.h" />
-		<Unit filename="tablero.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="tablero.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
